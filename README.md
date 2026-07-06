@@ -1,19 +1,32 @@
-# Personal Site (now w/vite!)
+# aidanb.io
 
-I recently opened up my original personal site and realized many things:
-1. The code was woefully out of date. 100% Class-based components in react, poor organization, mis-matched functions. Something had to be done
-2. `create-react-app` has also aged poorly. Webpack was struggling with my static assests since many packages were now (also) out of date.
-3. Bugs. There were a couple bugs in the deployed version that needed to be sorted.
+Minimal personal site shell built with Vite and React.
 
+## Requirements
 
-Put all of these together, and what do you get?
+- Node.js 20+ (see `.node-version`)
 
-## A new Website, built on Vite.js, with less package dependancies.
+If you use [fnm](https://github.com/Schniz/fnm), run `fnm use` in the project root — it reads `.node-version` automatically. To set Node 20 as your default everywhere:
 
-I'm trying to mimic the functionality of the original app, without so many random packages from npm. Currently, this version is using:
+```bash
+fnm install 20
+fnm default 20
+```
 
-- Bootstrap: Styling, Scrollspy, Nav
-- ParticleJS: Obviously
-- DEVICONS: For the sweet, sweet icons. 
+## Stack
 
-I hope to eliminate Bootstrap in favor of in-house CSS, but the website needs to be off the ground first. 
+- Vite 5
+- React 18
+- Tailwind CSS v4
+
+## Scripts
+
+```bash
+npm run dev      # local dev server
+npm run build    # production build
+npm run deploy   # deploy to GitHub Pages
+```
+
+## Theming
+
+Dark/light mode uses Tailwind's `dark` variant with a class on `<html>`. The nav includes a toggle; preference is saved to `localStorage`.

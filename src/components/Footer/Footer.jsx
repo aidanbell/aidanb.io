@@ -1,11 +1,9 @@
-import "./Footer.css"
-
 export default function Footer() {
   return (
-    <footer className="footer bg-dark">
-      <div className="footer-copyright">
-        <p>© 2023 Aidan Bell</p>
-      </div>
+    <footer className="border-t border-neutral-200 px-6 py-8 text-center dark:border-neutral-800">
+      <p className="text-sm text-neutral-500 dark:text-neutral-400">
+        © {new Date().getFullYear()} Aidan Bell
+      </p>
     </footer>
-  )
+  );
 }
