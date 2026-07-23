@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>aidanb.io</title>
+    <script>
+      // GitHub Pages SPA redirect — stores path in query, index.html restores it.
+      (function () {
+        var redirect = sessionStorage.getItem('spa-redirect');
+        if (redirect) {
+          sessionStorage.removeItem('spa-redirect');
+          history.replaceState(null, '', redirect);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <script>
+      sessionStorage.setItem(
+        'spa-redirect',
+        location.pathname + location.search + location.hash
+      );
+      location.replace('/');
+    </script>
+  </body>
+</html>
