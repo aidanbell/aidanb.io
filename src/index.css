@@ -4,14 +4,93 @@
 
 @theme {
   --font-sans: 'Wix Madefor Display', system-ui, sans-serif;
+  --font-display: 'Newsreader', 'Times New Roman', serif;
+  --animate-fade-up: fade-up 0.7s ease-out both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.6rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @layer base {
   html {
-    @apply antialiased;
+    @apply antialiased scroll-smooth;
   }
 
   body {
     @apply bg-neutral-50 font-sans text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Theme toggle: gentle diagonal wipe via View Transitions API */
+@supports (view-transition-name: none) {
+  @media (prefers-reduced-motion: no-preference) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+      mix-blend-mode: normal;
+    }
+
+    ::view-transition-old(root) {
+      z-index: 1;
+    }
+
+    ::view-transition-new(root) {
+      z-index: 2;
+      animation: theme-diagonal-wipe 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html[data-theme-transition='light']::view-transition-new(root) {
+      animation-name: theme-diagonal-wipe;
+    }
+
+    html[data-theme-transition='dark']::view-transition-new(root) {
+      animation-name: theme-diagonal-wipe-reverse;
+    }
+  }
+}
+
+@keyframes theme-diagonal-wipe {
+  from {
+    clip-path: polygon(0% 0%, 0% 0%, 0% 0%);
+  }
+  to {
+    clip-path: polygon(0% 0%, 220% 0%, 0% 220%);
+  }
+}
+
+@keyframes theme-diagonal-wipe-reverse {
+  from {
+    clip-path: polygon(100% 0%, 100% 0%, 100% 0%);
+  }
+  to {
+    clip-path: polygon(100% 0%, -120% 0%, 100% 220%);
   }
 }

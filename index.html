@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Wix+Madefor+Display:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <title>aidanb.io</title>
@@ -18,6 +18,15 @@
         ).matches;
         if (stored === 'dark' || (!stored && prefersDark)) {
           document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+    <script>
+      (function () {
+        const redirect = sessionStorage.getItem('spa-redirect');
+        if (redirect) {
+          sessionStorage.removeItem('spa-redirect');
+          history.replaceState(null, '', redirect);
         }
       })();
     </script>

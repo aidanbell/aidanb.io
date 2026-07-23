@@ -1,32 +1,57 @@
 # aidanb.io
 
-Minimal personal site shell built with Vite and React.
-
-## Requirements
-
-- Node.js 20+ (see `.node-version`)
-
-If you use [fnm](https://github.com/Schniz/fnm), run `fnm use` in the project root — it reads `.node-version` automatically. To set Node 20 as your default everywhere:
-
-```bash
-fnm install 20
-fnm default 20
-```
+Personal site for Aidan Bell — full-stack engineer with a focus on dashboards and form-heavy UIs.
 
 ## Stack
 
-- Vite 5
-- React 18
-- Tailwind CSS v4
+- **Vite 5** + **React 18**
+- **Tailwind CSS v4** (`@tailwindcss/vite`)
+- **React Router** — `/` and `/playground`
+- **React Hook Form** + **Zod** — schema-driven form playground
+- **CodeMirror** — JSON schema editor
+- **Lucide** — UI icons
+
+## Requirements
+
+- Node.js **20+** (see `.node-version`)
+
+With [fnm](https://github.com/Schniz/fnm):
+
+```bash
+fnm use          # reads .node-version
+fnm default 20   # optional: set global default
+```
 
 ## Scripts
 
 ```bash
-npm run dev      # local dev server
-npm run build    # production build
-npm run deploy   # deploy to GitHub Pages
+npm install
+npm run dev       # local dev server
+npm run build     # production build → dist/
+npm run preview   # preview production build
+npm run deploy    # build + publish dist/ to GitHub Pages
 ```
+
+## Site map
+
+| Route | Content |
+|-------|---------|
+| `/` | Home, About, Approach, Work |
+| `/playground` | Live schema → form demo |
 
 ## Theming
 
-Dark/light mode uses Tailwind's `dark` variant with a class on `<html>`. The nav includes a toggle; preference is saved to `localStorage`.
+Class-based dark mode on `<html>`. Toggle in the nav; preference is stored in `localStorage`. Theme changes use the View Transitions API for a diagonal wipe when supported (respects `prefers-reduced-motion`).
+
+## Playground
+
+Edit a JSON form schema on the left; a validated React form renders on the right.
+
+Supported field types: `string`, `email`, `number`, `boolean`, `select`, `textarea`.
+
+Sample schemas are available from the dropdown (signup, feedback, event registration).
+
+## Deploy notes
+
+- Custom domain via `public/CNAME`
+- `public/404.html` restores SPA routes on GitHub Pages refreshes
