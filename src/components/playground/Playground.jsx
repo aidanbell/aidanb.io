@@ -66,7 +66,7 @@ export default function Playground() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section className="flex min-h-[520px] flex-col rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
+        <section className="flex min-h-[520px] min-w-0 flex-col overflow-hidden rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-medium">Schema</h2>
             {parseResult.success ? (
@@ -81,7 +81,7 @@ export default function Playground() {
               </span>
             )}
           </div>
-          <div className="min-h-0 flex-1">
+          <div className="min-h-0 min-w-0 flex-1">
             <SchemaEditor value={schemaText} onChange={setSchemaText} />
           </div>
           {!parseResult.success && (
@@ -91,9 +91,9 @@ export default function Playground() {
           )}
         </section>
 
-        <section className="flex min-h-[520px] flex-col rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
+        <section className="flex min-h-[520px] min-w-0 flex-col overflow-hidden rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
           <h2 className="mb-3 text-sm font-medium">Preview</h2>
-          <div className="min-h-0 flex-1">
+          <div className="min-h-0 min-w-0 flex-1">
             {parseResult.success ? (
               <DynamicForm
                 definition={parseResult.data}

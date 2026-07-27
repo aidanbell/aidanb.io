@@ -21,7 +21,7 @@ export default function SchemaEditor({ value, onChange }) {
         foldGutter: true,
         highlightActiveLine: true,
       }}
-      className="h-full overflow-hidden rounded-md border border-neutral-200 text-sm dark:border-neutral-700 [&_.cm-editor]:h-full [&_.cm-scroller]:min-h-[420px]"
+      className="h-full w-full max-w-full overflow-hidden rounded-md border border-neutral-200 text-sm dark:border-neutral-700 [&_.cm-editor]:h-full [&_.cm-editor]:max-w-full [&_.cm-scroller]:min-h-[420px] [&_.cm-scroller]:overflow-x-auto"
     />
   );
 }

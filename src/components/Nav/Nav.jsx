@@ -37,7 +37,7 @@ export default function Nav() {
       </Link>
       <div className="flex items-center gap-6">
         <nav
-          className="flex max-w-[60vw] gap-4 overflow-x-auto text-nowrap sm:max-w-none sm:gap-6"
+          className="hidden gap-6 text-nowrap sm:flex"
           aria-label="Main"
         >
           <NavLink to="/" hash="#home">
