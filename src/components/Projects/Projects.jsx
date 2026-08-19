@@ -5,7 +5,7 @@ import {
   FilePenLine,
   Film,
   LayoutDashboard,
-  SquarePen,
+  Package,
 } from 'lucide-react';
 import { GitHubIcon } from '../icons/BrandIcons';
 import {
@@ -45,22 +45,39 @@ const projects = [
     links: [],
   },
   {
-    name: 'Schema Form Playground',
-    role: 'Design & build',
-    icon: SquarePen,
+    name: 'schema-form',
+    role: 'Open source · npm',
+    icon: Package,
     description:
-      'A live schema-to-form engine: edit a JSON schema, get an accessible React form with validation. Built to explore how configurable internal tools can ship without hardcoding every field.',
-    stack: ['React', 'Zod', 'React Hook Form', 'Tailwind CSS', 'CodeMirror'],
+      'A pair of React packages for schema-driven forms: a headless engine that parses a JSON schema into validation and field state, and a styled Tailwind/BaseUI layer that renders an accessible form from that same config. Built so internal tools can ship form-heavy UIs without hardcoding every field.',
+    stack: [
+      'React',
+      'TypeScript',
+      'Valibot',
+      'React Hook Form',
+      'Tailwind CSS',
+      'Base UI',
+    ],
     highlights: [
-      'Dynamic field rendering from a validated schema',
-      'Client-side validation with clear error states',
-      'Sample schemas for signup, feedback, and registration flows',
+      'Headless @aidanbell/schema-form: parse, validate, and useSchemaForm without owning the pixels',
+      'Styled @aidanbell/schema-form-ui: drop-in <SchemaForm /> with classNames theming and accessible defaults',
+      'Live playground on this site dogfoods both packages — schema in, form out',
     ],
     links: [
       {
         label: 'Open playground',
         to: '/playground',
         icon: ArrowUpRight,
+      },
+      {
+        label: 'schema-form',
+        href: 'https://www.npmjs.com/package/@aidanbell/schema-form',
+        icon: Package,
+      },
+      {
+        label: 'schema-form-ui',
+        href: 'https://www.npmjs.com/package/@aidanbell/schema-form-ui',
+        icon: Package,
       },
     ],
   },

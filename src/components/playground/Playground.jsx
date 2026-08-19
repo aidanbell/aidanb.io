@@ -1,23 +1,71 @@
 import { useMemo, useState } from 'react';
-import { AlignLeft, CircleAlert, CircleCheck } from 'lucide-react';
-import { parseFormDefinition } from '../../lib/schema';
 import {
-  defaultSchemaText,
-  sampleSchemas,
-} from '../../lib/sampleSchemas';
+  AlignLeft,
+  CircleAlert,
+  CircleCheck,
+  ExternalLink,
+  TriangleAlert,
+} from 'lucide-react';
+import { parseFormDefinition } from '@aidanbell/schema-form';
+import { SchemaForm } from '@aidanbell/schema-form-ui';
+import { defaultSchemaText, sampleSchemas } from '../../lib/sampleSchemas';
 import Button from '../ui/Button';
-import DynamicForm from './DynamicForm';
+import CodeSnippet from './CodeSnippet';
+import HeadlessForm from './HeadlessForm';
 import SchemaEditor from './SchemaEditor';
+import { themePresets } from './themePresets';
+
+const packageLinks = [
+  {
+    label: '@aidanbell/schema-form',
+    href: 'https://www.npmjs.com/package/@aidanbell/schema-form',
+  },
+  {
+    label: '@aidanbell/schema-form-ui',
+    href: 'https://www.npmjs.com/package/@aidanbell/schema-form-ui',
+  },
+];
 
 function formatSchemaText(text) {
   return JSON.stringify(JSON.parse(text), null, 2);
 }
 
+function IssueList({ issues, fallback, tone }) {
+  const toneClasses =
+    tone === 'warning'
+      ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400'
+      : 'bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400';
+
+  return (
+    <div className={`mt-3 rounded-md px-3 py-2 text-sm ${toneClasses}`}>
+      {issues?.length ? (
+        <ul className="space-y-1">
+          {issues.map((issue, index) => (
+            <li key={`${issue.path}-${index}`}>
+              {issue.path && (
+                <code className="mr-1.5 rounded bg-black/5 px-1 py-0.5 text-xs dark:bg-white/10">
+                  {issue.path}
+                </code>
+              )}
+              {issue.message}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>{fallback}</p>
+      )}
+    </div>
+  );
+}
+
 export default function Playground() {
   const [schemaText, setSchemaText] = useState(defaultSchemaText);
   const [submittedValues, setSubmittedValues] = useState(null);
+  const [mode, setMode] = useState('styled');
+  const [themeId, setThemeId] = useState(themePresets[0].id);
 
   const parseResult = useMemo(() => parseFormDefinition(schemaText), [schemaText]);
+  const theme = themePresets.find((preset) => preset.id === themeId) ?? themePresets[0];
 
   const handleSampleChange = (event) => {
     const sample = sampleSchemas.find((item) => item.id === event.target.value);
@@ -34,14 +82,37 @@ export default function Playground() {
     }
   };
 
+  const handleModeChange = (nextMode) => {
+    setMode(nextMode);
+    setSubmittedValues(null);
+  };
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
       <div className="mb-8 max-w-2xl">
         <h1 className="text-3xl font-semibold tracking-tight">Playground</h1>
         <p className="mt-3 text-neutral-500 dark:text-neutral-400">
           Schema in, accessible form out. Edit the JSON schema on the left and
-          preview a live form on the right.
+          preview a live form on the right — rendered by{' '}
+          <code className="rounded bg-neutral-100 px-1 py-0.5 text-sm dark:bg-neutral-800">
+            @aidanbell/schema-form
+          </code>
+          .
         </p>
+        <div className="mt-3 flex flex-wrap gap-4">
+          {packageLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 text-sm text-neutral-600 underline-offset-4 hover:underline dark:text-neutral-400"
+            >
+              {link.label}
+              <ExternalLink className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+            </a>
+          ))}
+        </div>
       </div>
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -59,10 +130,57 @@ export default function Playground() {
             ))}
           </select>
         </label>
+
         <Button variant="secondary" size="sm" onClick={handleFormat} className="gap-1.5">
           <AlignLeft className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
           Format JSON
         </Button>
+
+        <div
+          className="inline-flex rounded-md border border-neutral-200 p-0.5 dark:border-neutral-700"
+          role="group"
+          aria-label="Renderer"
+        >
+          <button
+            type="button"
+            onClick={() => handleModeChange('styled')}
+            className={`h-8 rounded px-3 text-xs font-medium transition-colors ${
+              mode === 'styled'
+                ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900'
+                : 'text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800'
+            }`}
+          >
+            Styled
+          </button>
+          <button
+            type="button"
+            onClick={() => handleModeChange('headless')}
+            className={`h-8 rounded px-3 text-xs font-medium transition-colors ${
+              mode === 'headless'
+                ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900'
+                : 'text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800'
+            }`}
+          >
+            Headless
+          </button>
+        </div>
+
+        {mode === 'styled' && (
+          <label className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+            Theme
+            <select
+              className="h-9 rounded-md border border-neutral-200 bg-white px-3 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+              value={themeId}
+              onChange={(event) => setThemeId(event.target.value)}
+            >
+              {themePresets.map((preset) => (
+                <option key={preset.id} value={preset.id}>
+                  {preset.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -85,20 +203,44 @@ export default function Playground() {
             <SchemaEditor value={schemaText} onChange={setSchemaText} />
           </div>
           {!parseResult.success && (
-            <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-950/40 dark:text-red-400">
-              {parseResult.error}
-            </p>
+            <IssueList issues={parseResult.issues} fallback={parseResult.error} />
+          )}
+          {parseResult.success && parseResult.warnings?.length > 0 && (
+            <div className="mt-3">
+              <p className="mb-1 inline-flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+                <TriangleAlert className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+                Warnings
+              </p>
+              <IssueList issues={parseResult.warnings} tone="warning" />
+            </div>
           )}
         </section>
 
         <section className="flex min-h-[520px] min-w-0 flex-col overflow-hidden rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
-          <h2 className="mb-3 text-sm font-medium">Preview</h2>
-          <div className="min-h-0 min-w-0 flex-1">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-sm font-medium">Preview</h2>
+            <span className="text-xs text-neutral-400 dark:text-neutral-500">
+              {mode === 'styled' ? '<SchemaForm /> from schema-form-ui' : 'useSchemaForm + custom inputs'}
+            </span>
+          </div>
+          <div className="min-h-0 min-w-0 flex-1 overflow-y-auto">
             {parseResult.success ? (
-              <DynamicForm
-                definition={parseResult.data}
-                onSubmit={(values) => setSubmittedValues(values)}
-              />
+              mode === 'styled' ? (
+                <SchemaForm
+                  key={`styled-${themeId}-${schemaText}`}
+                  config={{
+                    schema: parseResult.data,
+                    ...(theme.classNames ? { classNames: theme.classNames } : {}),
+                  }}
+                  onSubmit={(values) => setSubmittedValues(values)}
+                />
+              ) : (
+                <HeadlessForm
+                  key={`headless-${schemaText}`}
+                  definition={parseResult.data}
+                  onSubmit={(values) => setSubmittedValues(values)}
+                />
+              )
             ) : (
               <div className="flex h-full items-center justify-center rounded-md border border-dashed border-neutral-200 p-6 text-sm text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">
                 Fix schema errors to render the form.
@@ -115,6 +257,14 @@ export default function Playground() {
             {JSON.stringify(submittedValues, null, 2)}
           </pre>
         </section>
+      )}
+
+      {parseResult.success && (
+        <CodeSnippet
+          schema={parseResult.data}
+          mode={mode}
+          themeClassNames={theme.classNames}
+        />
       )}
     </div>
   );

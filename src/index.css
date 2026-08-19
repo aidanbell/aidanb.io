@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* schema-form-ui ships no CSS; Tailwind must scan its dist for utility classes. */
+@source "../node_modules/@aidanbell/schema-form-ui/dist/**/*.{js,mjs}";
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {

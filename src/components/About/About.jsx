@@ -42,19 +42,20 @@ export default function About() {
           <h2 className={`${headingClass} text-3xl font-medium`}>About</h2>
           <div className={`mt-4 space-y-4 ${mutedTextClass}`}>
             <p>
-              Full-stack engineer — APIs, data, and shipping products end to end
-              — with recent depth in complex dashboards and form-heavy
-              workflows: multi-step flows, validation, data tables, and
-              accessible component systems.
+              Hi there! I'm Aidan, a full-stack engineer passionate about useable 
+              front-ends, accessible forms, and writing code that is readable, 
+              maintainable, and performant. I deal a lot with complex forms and data, 
+              and build with the core belief that both good code, and good UI should
+              explain itself. 
             </p>
             <p>
-              I care about the unglamorous parts of product UI: empty states,
-              error recovery, keyboard paths, and making dense interfaces feel
-              calm and usable. That front-end focus sits on top of full-stack
-              instincts — knowing how auth, APIs, and data shape what the
-              interface can do. Previously taught web development at General
-              Assembly, where I helped people turn messy requirements into clear
-              interfaces.
+              I care about the parts of product UI that are quickly dismissed, or 
+              handed off to a component library; things like empty states, 
+              accessibility, and making dense interfaces feel calm and usable. 
+              My experience in both front and back end development means that these 
+              practices follow the data as it flows from user to database, all 
+              while making sure that forms, API, middleware, and controllers are 
+              clean, performant, and easy to build upon. 
             </p>
             <p>
               Right now I&apos;m building and refining a schema-driven form
