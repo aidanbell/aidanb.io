@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -19,7 +19,7 @@
     <script>
       sessionStorage.setItem(
         'spa-redirect',
-        location.pathname + location.search + location.hash
+        location.pathname + location.search + location.hash,
       );
       location.replace('/');
     </script>
