@@ -35,7 +35,7 @@ export default function Home() {
             See my work
           </a>
           <Link
-            to="/playground"
+            to="/schema-form"
             className={`rounded-md border border-neutral-300 px-4 py-2 text-sm transition-colors hover:border-neutral-400 hover:bg-white/60 dark:border-neutral-700 dark:hover:border-neutral-500 dark:hover:bg-neutral-900/60 ${mutedTextClass}`}
           >
             Try out <span className="italic">schema-form</span>
