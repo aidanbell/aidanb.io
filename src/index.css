@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* schema-form-ui ships no CSS; Tailwind must scan its dist for utility classes. */
 @source "../node_modules/@aidanbell/schema-form-ui/dist/**/*.{js,mjs}";
@@ -6,8 +6,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: 'Wix Madefor Display', system-ui, sans-serif;
-  --font-display: 'Newsreader', 'Times New Roman', serif;
+  --font-sans: "Wix Madefor Display", system-ui, sans-serif;
+  --font-display: "Newsreader", "Times New Roman", serif;
   --animate-fade-up: fade-up 0.7s ease-out both;
 }
 
@@ -70,11 +70,11 @@
       animation: theme-diagonal-wipe 0.55s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    html[data-theme-transition='light']::view-transition-new(root) {
+    html[data-theme-transition="light"]::view-transition-new(root) {
       animation-name: theme-diagonal-wipe;
     }
 
-    html[data-theme-transition='dark']::view-transition-new(root) {
+    html[data-theme-transition="dark"]::view-transition-new(root) {
       animation-name: theme-diagonal-wipe-reverse;
     }
   }

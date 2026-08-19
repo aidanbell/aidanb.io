@@ -1,23 +1,8 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react';
-import {
-  STORAGE_KEY,
-  ThemeContext,
-  applyTheme,
-  getStoredTheme,
-  getSystemTheme,
-  type Theme,
-} from './theme';
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { STORAGE_KEY, ThemeContext, applyTheme, getStoredTheme, getSystemTheme, type Theme } from "./theme";
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(
-    () => getStoredTheme() ?? getSystemTheme(),
-  );
+  const [theme, setTheme] = useState<Theme>(() => getStoredTheme() ?? getSystemTheme());
 
   useEffect(() => {
     applyTheme(theme);
@@ -25,7 +10,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [theme]);
 
   useEffect(() => {
-    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
 
     const handleChange = () => {
       if (!getStoredTheme()) {
@@ -33,12 +18,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    media.addEventListener('change', handleChange);
-    return () => media.removeEventListener('change', handleChange);
+    media.addEventListener("change", handleChange);
+    return () => media.removeEventListener("change", handleChange);
   }, []);
 
   const toggleTheme = useCallback(() => {
-    const nextTheme: Theme = theme === 'dark' ? 'light' : 'dark';
+    const nextTheme: Theme = theme === "dark" ? "light" : "dark";
 
     const update = () => {
       applyTheme(nextTheme);
@@ -46,9 +31,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       setTheme(nextTheme);
     };
 
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (!document.startViewTransition || prefersReducedMotion) {
       update();
@@ -65,7 +48,5 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme]);
 
-  return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }

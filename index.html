@@ -12,21 +12,19 @@
     <title>aidanb.io</title>
     <script>
       (function () {
-        const stored = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia(
-          '(prefers-color-scheme: dark)',
-        ).matches;
-        if (stored === 'dark' || (!stored && prefersDark)) {
-          document.documentElement.classList.add('dark');
+        const stored = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (stored === "dark" || (!stored && prefersDark)) {
+          document.documentElement.classList.add("dark");
         }
       })();
     </script>
     <script>
       (function () {
-        const redirect = sessionStorage.getItem('spa-redirect');
+        const redirect = sessionStorage.getItem("spa-redirect");
         if (redirect) {
-          sessionStorage.removeItem('spa-redirect');
-          history.replaceState(null, '', redirect);
+          sessionStorage.removeItem("spa-redirect");
+          history.replaceState(null, "", redirect);
         }
       })();
     </script>

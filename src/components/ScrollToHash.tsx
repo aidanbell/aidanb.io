@@ -1,14 +1,14 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 export default function ScrollToHash() {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    if (pathname !== '/') return;
+    if (pathname !== "/") return;
 
-    if (!hash || hash === '#home') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (!hash || hash === "#home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
@@ -17,7 +17,7 @@ export default function ScrollToHash() {
     const frame = requestAnimationFrame(() => {
       const element = document.getElementById(id);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     });
 

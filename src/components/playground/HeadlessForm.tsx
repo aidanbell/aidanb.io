@@ -1,14 +1,14 @@
-import type { FormDefinition } from '@aidanbell/schema-form';
-import { useSchemaForm } from '@aidanbell/schema-form';
-import Button from '../ui/Button';
-import Checkbox from '../ui/Checkbox';
-import Input from '../ui/Input';
-import Label from '../ui/Label';
-import Select from '../ui/Select';
-import Textarea from '../ui/Textarea';
+import type { FormDefinition } from "@aidanbell/schema-form";
+import { useSchemaForm } from "@aidanbell/schema-form";
+import Button from "../ui/Button";
+import Checkbox from "../ui/Checkbox";
+import Input from "../ui/Input";
+import Label from "../ui/Label";
+import Select from "../ui/Select";
+import Textarea from "../ui/Textarea";
 
 function fieldErrorMessage(message: unknown) {
-  return typeof message === 'string' ? message : undefined;
+  return typeof message === "string" ? message : undefined;
 }
 
 function FieldError({ message }: { message?: string }) {
@@ -18,9 +18,7 @@ function FieldError({ message }: { message?: string }) {
 
 function FieldDescription({ text }: { text?: string }) {
   if (!text) return null;
-  return (
-    <p className="text-xs text-neutral-500 dark:text-neutral-400">{text}</p>
-  );
+  return <p className="text-xs text-neutral-500 dark:text-neutral-400">{text}</p>;
 }
 
 type HeadlessFormProps = {
@@ -32,10 +30,7 @@ type HeadlessFormProps = {
  * "Bring your own UI" demo: the headless @aidanbell/schema-form hook wired to
  * this site's own form primitives instead of the styled schema-form-ui package.
  */
-export default function HeadlessForm({
-  definition,
-  onSubmit,
-}: HeadlessFormProps) {
+export default function HeadlessForm({ definition, onSubmit }: HeadlessFormProps) {
   const { fields, form, handleSubmit } = useSchemaForm({
     definition,
     onSubmit,
@@ -47,25 +42,17 @@ export default function HeadlessForm({
   } = form;
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex h-full flex-col gap-4"
-      noValidate
-    >
+    <form onSubmit={handleSubmit} className="flex h-full flex-col gap-4" noValidate>
       <div className="space-y-4">
         {fields.map((field) => {
           const fieldId = `headless-${field.name}`;
           const error = fieldErrorMessage(errors[field.name]?.message);
           const label = field.label ?? field.name;
 
-          if (field.type === 'boolean') {
+          if (field.type === "boolean") {
             return (
               <div key={field.name} className="flex items-start gap-3">
-                <Checkbox
-                  id={fieldId}
-                  disabled={field.disabled}
-                  {...register(field.name)}
-                />
+                <Checkbox id={fieldId} disabled={field.disabled} {...register(field.name)} />
                 <div className="space-y-1">
                   <Label htmlFor={fieldId} required={field.required}>
                     {label}
@@ -77,14 +64,12 @@ export default function HeadlessForm({
             );
           }
 
-          if (field.type === 'radio') {
+          if (field.type === "radio") {
             return (
               <fieldset key={field.name} className="space-y-2">
                 <legend className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                   {label}
-                  {field.required && (
-                    <span className="ml-0.5 text-red-500">*</span>
-                  )}
+                  {field.required && <span className="ml-0.5 text-red-500">*</span>}
                 </legend>
                 <FieldDescription text={field.description} />
                 <div className="flex flex-wrap gap-4">
@@ -109,7 +94,7 @@ export default function HeadlessForm({
             );
           }
 
-          if (field.type === 'textarea') {
+          if (field.type === "textarea") {
             return (
               <div key={field.name} className="space-y-2">
                 <Label htmlFor={fieldId} required={field.required}>
@@ -127,18 +112,14 @@ export default function HeadlessForm({
             );
           }
 
-          if (field.type === 'select') {
+          if (field.type === "select") {
             return (
               <div key={field.name} className="space-y-2">
                 <Label htmlFor={fieldId} required={field.required}>
                   {label}
                 </Label>
                 <FieldDescription text={field.description} />
-                <Select
-                  id={fieldId}
-                  disabled={field.disabled}
-                  {...register(field.name)}
-                >
+                <Select id={fieldId} disabled={field.disabled} {...register(field.name)}>
                   {!field.required && <option value="">Select...</option>}
                   {field.options?.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -151,7 +132,7 @@ export default function HeadlessForm({
             );
           }
 
-          const inputType = field.type === 'string' ? 'text' : field.type;
+          const inputType = field.type === "string" ? "text" : field.type;
 
           return (
             <div key={field.name} className="space-y-2">

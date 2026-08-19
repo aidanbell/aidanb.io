@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
-import CodeMirror from '@uiw/react-codemirror';
-import { json } from '@codemirror/lang-json';
-import { oneDark } from '@codemirror/theme-one-dark';
-import { useTheme } from '../../hooks/useTheme';
+import { useMemo } from "react";
+import CodeMirror from "@uiw/react-codemirror";
+import { json } from "@codemirror/lang-json";
+import { oneDark } from "@codemirror/theme-one-dark";
+import { useTheme } from "../../hooks/useTheme";
 
 type SchemaEditorProps = {
   value: string;
@@ -19,7 +19,7 @@ export default function SchemaEditor({ value, onChange }: SchemaEditorProps) {
       value={value}
       height="100%"
       extensions={extensions}
-      theme={theme === 'dark' ? oneDark : 'light'}
+      theme={theme === "dark" ? oneDark : "light"}
       onChange={onChange}
       basicSetup={{
         lineNumbers: true,
