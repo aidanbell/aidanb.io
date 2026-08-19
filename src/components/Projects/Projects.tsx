@@ -1,3 +1,4 @@
+import type { ComponentType, SVGProps } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowUpRight,
@@ -6,6 +7,7 @@ import {
   Film,
   LayoutDashboard,
   Package,
+  type LucideIcon,
 } from 'lucide-react';
 import { GitHubIcon } from '../icons/BrandIcons';
 import {
@@ -17,7 +19,27 @@ import {
 
 const linkIconClass = 'size-3.5 shrink-0';
 
-const projects = [
+type IconComponent = LucideIcon | ComponentType<SVGProps<SVGSVGElement>>;
+
+type ProjectLink = {
+  label: string;
+  icon: IconComponent;
+  to?: string;
+  href?: string;
+};
+
+type Project = {
+  name: string;
+  role: string;
+  featured?: boolean;
+  icon: LucideIcon;
+  description: string;
+  stack: string[];
+  highlights: string[];
+  links: ProjectLink[];
+};
+
+const projects: Project[] = [
   {
     name: 'Campaign dashboard modernization',
     role: 'Full-stack · ongoing',

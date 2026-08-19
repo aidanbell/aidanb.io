@@ -1,6 +1,12 @@
-// Presets for SchemaForm's config.classNames theming API. Classes are merged
-// over the package defaults with tailwind-merge, so later utilities win.
-export const themePresets = [
+import type { SchemaFormClassNames } from '@aidanbell/schema-form-ui';
+
+export type ThemePreset = {
+  id: string;
+  label: string;
+  classNames: SchemaFormClassNames | null;
+};
+
+export const themePresets: ThemePreset[] = [
   {
     id: 'default',
     label: 'Default',

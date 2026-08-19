@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 
@@ -7,7 +8,15 @@ const linkClass =
 const activeLinkClass =
   'text-neutral-900 after:scale-x-100 dark:text-neutral-100';
 
-function NavLink({ to, hash, children }) {
+function NavLink({
+  to,
+  hash,
+  children,
+}: {
+  to: string;
+  hash?: string;
+  children: ReactNode;
+}) {
   const location = useLocation();
   const isActive = hash
     ? location.pathname === '/' &&
@@ -36,10 +45,7 @@ export default function Nav() {
         /ab/
       </Link>
       <div className="flex items-center gap-6">
-        <nav
-          className="hidden gap-6 text-nowrap sm:flex"
-          aria-label="Main"
-        >
+        <nav className="hidden gap-6 text-nowrap sm:flex" aria-label="Main">
           <NavLink to="/" hash="#home">
             Home
           </NavLink>

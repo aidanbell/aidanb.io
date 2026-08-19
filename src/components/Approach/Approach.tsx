@@ -29,8 +29,8 @@ export default function Approach() {
       <h2 className={`${headingClass} text-3xl font-medium`}>How I build UI</h2>
       <p className={`mt-4 ${mutedTextClass}`}>
         Where I spend a lot of my time lately: the interface layer of full-stack
-        products. Dashboards, form-heavy tools, and WYSIWYG editors; all of these
-        follow the same principles:
+        products. Dashboards, form-heavy tools, and WYSIWYG editors; all of
+        these follow the same principles:
       </p>
       <ul className="mt-10 grid gap-6 sm:grid-cols-2">
         {principles.map((item) => (
@@ -38,7 +38,9 @@ export default function Approach() {
             key={item.title}
             className="rounded-xl border border-neutral-200 bg-white/70 p-5 dark:border-neutral-800 dark:bg-neutral-900/50"
           >
-            <h3 className="text-base font-medium tracking-tight">{item.title}</h3>
+            <h3 className="text-base font-medium tracking-tight">
+              {item.title}
+            </h3>
             <p className={`mt-2 text-sm leading-relaxed ${mutedTextClass}`}>
               {item.body}
             </p>

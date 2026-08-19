@@ -1,11 +1,15 @@
+import type { TextareaHTMLAttributes } from 'react';
 import { cn } from '../../lib/cn';
 
-export default function Textarea({ className, ...props }) {
+export default function Textarea({
+  className,
+  ...props
+}: TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <textarea
       className={cn(
         'flex min-h-24 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:placeholder:text-neutral-500',
-        className
+        className,
       )}
       {...props}
     />

@@ -1,4 +1,6 @@
-export function LinkedInIcon({ className, ...props }) {
+import type { SVGProps } from 'react';
+
+export function LinkedInIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -12,7 +14,7 @@ export function LinkedInIcon({ className, ...props }) {
   );
 }
 
-export function GitHubIcon({ className, ...props }) {
+export function GitHubIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 0 24 24"

@@ -4,7 +4,12 @@ import { json } from '@codemirror/lang-json';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { useTheme } from '../../hooks/useTheme';
 
-export default function SchemaEditor({ value, onChange }) {
+type SchemaEditorProps = {
+  value: string;
+  onChange: (value: string) => void;
+};
+
+export default function SchemaEditor({ value, onChange }: SchemaEditorProps) {
   const { theme } = useTheme();
 
   const extensions = useMemo(() => [json()], []);

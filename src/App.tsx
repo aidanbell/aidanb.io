@@ -15,7 +15,9 @@ function App() {
       <main className="pt-14">
         <Suspense
           fallback={
-            <div className="px-6 py-20 text-sm text-neutral-500">Loading...</div>
+            <div className="px-6 py-20 text-sm text-neutral-500">
+              Loading...
+            </div>
           }
         >
           <Routes>

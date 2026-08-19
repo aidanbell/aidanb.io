@@ -19,9 +19,7 @@ export default function Home() {
       <div
         className={`${sectionClass} relative flex min-h-[calc(100vh-3.5rem)] flex-col justify-center`}
       >
-        <p className={`animate-fade-up text-sm ${mutedTextClass}`}>
-          aidanb.io
-        </p>
+        <p className={`animate-fade-up text-sm ${mutedTextClass}`}>aidanb.io</p>
         <h1
           className={`animate-fade-up ${headingClass} mt-3 text-5xl font-medium sm:text-6xl`}
           style={{ animationDelay: '80ms' }}

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ChangeEvent } from 'react';
 import {
   AlignLeft,
   CircleAlert,
@@ -6,7 +6,7 @@ import {
   ExternalLink,
   TriangleAlert,
 } from 'lucide-react';
-import { parseFormDefinition } from '@aidanbell/schema-form';
+import { parseFormDefinition, type ParseIssue } from '@aidanbell/schema-form';
 import { SchemaForm } from '@aidanbell/schema-form-ui';
 import { defaultSchemaText, sampleSchemas } from '../../lib/sampleSchemas';
 import Button from '../ui/Button';
@@ -14,6 +14,19 @@ import CodeSnippet from './CodeSnippet';
 import HeadlessForm from './HeadlessForm';
 import SchemaEditor from './SchemaEditor';
 import { themePresets } from './themePresets';
+
+type PlaygroundMode = 'styled' | 'headless';
+
+function requireFirst<T>(items: T[], label: string): T {
+  const first = items[0];
+  if (!first) {
+    throw new Error(`${label} must include at least one item`);
+  }
+  return first;
+}
+
+const defaultTheme = requireFirst(themePresets, 'themePresets');
+const defaultSample = requireFirst(sampleSchemas, 'sampleSchemas');
 
 const packageLinks = [
   {
@@ -26,11 +39,19 @@ const packageLinks = [
   },
 ];
 
-function formatSchemaText(text) {
+function formatSchemaText(text: string) {
   return JSON.stringify(JSON.parse(text), null, 2);
 }
 
-function IssueList({ issues, fallback, tone }) {
+function IssueList({
+  issues,
+  fallback,
+  tone,
+}: {
+  issues?: ParseIssue[];
+  fallback?: string;
+  tone?: 'warning' | 'error';
+}) {
   const toneClasses =
     tone === 'warning'
       ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400'
@@ -60,14 +81,21 @@ function IssueList({ issues, fallback, tone }) {
 
 export default function Playground() {
   const [schemaText, setSchemaText] = useState(defaultSchemaText);
-  const [submittedValues, setSubmittedValues] = useState(null);
-  const [mode, setMode] = useState('styled');
-  const [themeId, setThemeId] = useState(themePresets[0].id);
+  const [submittedValues, setSubmittedValues] = useState<Record<
+    string,
+    unknown
+  > | null>(null);
+  const [mode, setMode] = useState<PlaygroundMode>('styled');
+  const [themeId, setThemeId] = useState(defaultTheme.id);
 
-  const parseResult = useMemo(() => parseFormDefinition(schemaText), [schemaText]);
-  const theme = themePresets.find((preset) => preset.id === themeId) ?? themePresets[0];
+  const parseResult = useMemo(
+    () => parseFormDefinition(schemaText),
+    [schemaText],
+  );
+  const theme =
+    themePresets.find((preset) => preset.id === themeId) ?? defaultTheme;
 
-  const handleSampleChange = (event) => {
+  const handleSampleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const sample = sampleSchemas.find((item) => item.id === event.target.value);
     if (!sample) return;
     setSchemaText(JSON.stringify(sample.schema, null, 2));
@@ -82,7 +110,7 @@ export default function Playground() {
     }
   };
 
-  const handleModeChange = (nextMode) => {
+  const handleModeChange = (nextMode: PlaygroundMode) => {
     setMode(nextMode);
     setSubmittedValues(null);
   };
@@ -109,7 +137,11 @@ export default function Playground() {
               className="inline-flex items-center gap-1 text-sm text-neutral-600 underline-offset-4 hover:underline dark:text-neutral-400"
             >
               {link.label}
-              <ExternalLink className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+              <ExternalLink
+                className="size-3.5"
+                strokeWidth={1.75}
+                aria-hidden="true"
+              />
             </a>
           ))}
         </div>
@@ -120,7 +152,7 @@ export default function Playground() {
           Sample
           <select
             className="h-9 rounded-md border border-neutral-200 bg-white px-3 text-sm dark:border-neutral-700 dark:bg-neutral-900"
-            defaultValue={sampleSchemas[0].id}
+            defaultValue={defaultSample.id}
             onChange={handleSampleChange}
           >
             {sampleSchemas.map((sample) => (
@@ -131,8 +163,17 @@ export default function Playground() {
           </select>
         </label>
 
-        <Button variant="secondary" size="sm" onClick={handleFormat} className="gap-1.5">
-          <AlignLeft className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={handleFormat}
+          className="gap-1.5"
+        >
+          <AlignLeft
+            className="size-3.5"
+            strokeWidth={1.75}
+            aria-hidden="true"
+          />
           Format JSON
         </Button>
 
@@ -189,12 +230,20 @@ export default function Playground() {
             <h2 className="text-sm font-medium">Schema</h2>
             {parseResult.success ? (
               <span className="inline-flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400">
-                <CircleCheck className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+                <CircleCheck
+                  className="size-3.5"
+                  strokeWidth={1.75}
+                  aria-hidden="true"
+                />
                 Valid
               </span>
             ) : (
               <span className="inline-flex items-center gap-1.5 text-xs text-red-500">
-                <CircleAlert className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+                <CircleAlert
+                  className="size-3.5"
+                  strokeWidth={1.75}
+                  aria-hidden="true"
+                />
                 Invalid
               </span>
             )}
@@ -203,12 +252,19 @@ export default function Playground() {
             <SchemaEditor value={schemaText} onChange={setSchemaText} />
           </div>
           {!parseResult.success && (
-            <IssueList issues={parseResult.issues} fallback={parseResult.error} />
+            <IssueList
+              issues={parseResult.issues}
+              fallback={parseResult.error}
+            />
           )}
-          {parseResult.success && parseResult.warnings?.length > 0 && (
+          {parseResult.success && (parseResult.warnings?.length ?? 0) > 0 && (
             <div className="mt-3">
               <p className="mb-1 inline-flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
-                <TriangleAlert className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+                <TriangleAlert
+                  className="size-3.5"
+                  strokeWidth={1.75}
+                  aria-hidden="true"
+                />
                 Warnings
               </p>
               <IssueList issues={parseResult.warnings} tone="warning" />
@@ -220,7 +276,9 @@ export default function Playground() {
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-medium">Preview</h2>
             <span className="text-xs text-neutral-400 dark:text-neutral-500">
-              {mode === 'styled' ? '<SchemaForm /> from schema-form-ui' : 'useSchemaForm + custom inputs'}
+              {mode === 'styled'
+                ? '<SchemaForm /> from schema-form-ui'
+                : 'useSchemaForm + custom inputs'}
             </span>
           </div>
           <div className="min-h-0 min-w-0 flex-1 overflow-y-auto">
@@ -230,7 +288,9 @@ export default function Playground() {
                   key={`styled-${themeId}-${schemaText}`}
                   config={{
                     schema: parseResult.data,
-                    ...(theme.classNames ? { classNames: theme.classNames } : {}),
+                    ...(theme.classNames
+                      ? { classNames: theme.classNames }
+                      : {}),
                   }}
                   onSubmit={(values) => setSubmittedValues(values)}
                 />

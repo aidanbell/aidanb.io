@@ -1,31 +1,23 @@
 import {
-  createContext,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useState,
+  type ReactNode,
 } from 'react';
+import {
+  STORAGE_KEY,
+  ThemeContext,
+  applyTheme,
+  getStoredTheme,
+  getSystemTheme,
+  type Theme,
+} from './theme';
 
-const STORAGE_KEY = 'theme';
-const ThemeContext = createContext(null);
-
-function getSystemTheme() {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'dark'
-    : 'light';
-}
-
-function getStoredTheme() {
-  return localStorage.getItem(STORAGE_KEY);
-}
-
-function applyTheme(theme) {
-  document.documentElement.classList.toggle('dark', theme === 'dark');
-}
-
-export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(() => getStoredTheme() ?? getSystemTheme());
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState<Theme>(
+    () => getStoredTheme() ?? getSystemTheme(),
+  );
 
   useEffect(() => {
     applyTheme(theme);
@@ -46,7 +38,7 @@ export function ThemeProvider({ children }) {
   }, []);
 
   const toggleTheme = useCallback(() => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    const nextTheme: Theme = theme === 'dark' ? 'light' : 'dark';
 
     const update = () => {
       applyTheme(nextTheme);
@@ -55,7 +47,7 @@ export function ThemeProvider({ children }) {
     };
 
     const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
+      '(prefers-reduced-motion: reduce)',
     ).matches;
 
     if (!document.startViewTransition || prefersReducedMotion) {
@@ -76,12 +68,4 @@ export function ThemeProvider({ children }) {
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
-}
-
-export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within ThemeProvider');
-  }
-  return context;
 }

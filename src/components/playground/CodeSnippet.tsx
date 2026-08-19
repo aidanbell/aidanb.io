@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Check, Copy } from 'lucide-react';
+import type { FormDefinition } from '@aidanbell/schema-form';
+import type { SchemaFormClassNames } from '@aidanbell/schema-form-ui';
 import Button from '../ui/Button';
 
 const STYLED_PACKAGES =
@@ -7,7 +9,7 @@ const STYLED_PACKAGES =
 const HEADLESS_PACKAGES =
   'pnpm add @aidanbell/schema-form valibot react-hook-form @hookform/resolvers';
 
-function indentBlock(text, spaces) {
+function indentBlock(text: string, spaces: number) {
   const pad = ' '.repeat(spaces);
   return text
     .split('\n')
@@ -15,12 +17,15 @@ function indentBlock(text, spaces) {
     .join('\n');
 }
 
-function buildStyledSnippet(schema, themeClassNames) {
+function buildStyledSnippet(
+  schema: FormDefinition,
+  themeClassNames: SchemaFormClassNames | null,
+) {
   const schemaJson = indentBlock(JSON.stringify(schema, null, 2), 0);
   const config = themeClassNames
     ? `{\n        schema,\n        classNames: ${indentBlock(
         JSON.stringify(themeClassNames, null, 2),
-        8
+        8,
       )},\n      }`
     : '{ schema }';
 
@@ -39,7 +44,7 @@ export function MyForm() {
 `;
 }
 
-function buildHeadlessSnippet(schema) {
+function buildHeadlessSnippet(schema: FormDefinition) {
   const schemaJson = indentBlock(JSON.stringify(schema, null, 2), 0);
 
   return `import { parseFormDefinition, useSchemaForm } from '@aidanbell/schema-form';
@@ -71,7 +76,7 @@ export function MyForm() {
 `;
 }
 
-function CopyButton({ text, label }) {
+function CopyButton({ text, label }: { text: string; label: string }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -85,9 +90,18 @@ function CopyButton({ text, label }) {
   };
 
   return (
-    <Button variant="secondary" size="sm" onClick={handleCopy} className="gap-1.5">
+    <Button
+      variant="secondary"
+      size="sm"
+      onClick={handleCopy}
+      className="gap-1.5"
+    >
       {copied ? (
-        <Check className="size-3.5 text-green-600 dark:text-green-400" strokeWidth={1.75} aria-hidden="true" />
+        <Check
+          className="size-3.5 text-green-600 dark:text-green-400"
+          strokeWidth={1.75}
+          aria-hidden="true"
+        />
       ) : (
         <Copy className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
       )}
@@ -96,7 +110,17 @@ function CopyButton({ text, label }) {
   );
 }
 
-export default function CodeSnippet({ schema, mode, themeClassNames }) {
+type CodeSnippetProps = {
+  schema: FormDefinition;
+  mode: 'styled' | 'headless';
+  themeClassNames: SchemaFormClassNames | null;
+};
+
+export default function CodeSnippet({
+  schema,
+  mode,
+  themeClassNames,
+}: CodeSnippetProps) {
   const install = mode === 'styled' ? STYLED_PACKAGES : HEADLESS_PACKAGES;
   const snippet =
     mode === 'styled'
@@ -132,7 +156,8 @@ export default function CodeSnippet({ schema, mode, themeClassNames }) {
         <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">
           schema-form-ui ships no CSS file — add{' '}
           <code className="rounded bg-neutral-100 px-1 py-0.5 dark:bg-neutral-800">
-            @source "../node_modules/@aidanbell/schema-form-ui/dist/**/*.{'{'}js,mjs{'}'}"
+            @source "../node_modules/@aidanbell/schema-form-ui/dist/**/*.{'{'}
+            js,mjs{'}'}"
           </code>{' '}
           to your Tailwind CSS entry so its classes are generated.
         </p>
