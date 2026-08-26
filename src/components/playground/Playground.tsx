@@ -1,12 +1,13 @@
-import { useMemo, useState, type ChangeEvent } from "react";
+import { useMemo, useState, type ChangeEvent, type ReactNode } from "react";
 import { AlignLeft, CircleAlert, CircleCheck, ExternalLink, TriangleAlert } from "lucide-react";
-import { parseFormDefinition, type ParseIssue } from "@aidanbell/schema-form";
-import { SchemaForm } from "@aidanbell/schema-form-ui";
+import { parseFormDefinition, type FormDefinition, type ParseIssue } from "@aidanbell/schema-form";
+import { SchemaForm, type FieldControlProps } from "@aidanbell/schema-form-ui";
 import { defaultSchemaText, sampleSchemas } from "../../lib/sampleSchemas";
 import Button from "../ui/Button";
-import CodeSnippet from "./CodeSnippet";
+import CodeSnippet, { type CustomControlMode } from "./CodeSnippet";
 import HeadlessForm from "./HeadlessForm";
 import SchemaEditor from "./SchemaEditor";
+import { StarRatingControl, StarRatingRow } from "./StarRatingControl";
 import { themePresets } from "./themePresets";
 
 type PlaygroundMode = "styled" | "headless";
@@ -21,8 +22,13 @@ function requireFirst<T>(items: T[], label: string): T {
 
 const defaultTheme = requireFirst(themePresets, "themePresets");
 const defaultSample = requireFirst(sampleSchemas, "sampleSchemas");
+const feedbackSample = sampleSchemas.find((sample) => sample.id === "feedback") ?? defaultSample;
 
 const packageLinks = [
+  {
+    label: "GitHub",
+    href: "https://github.com/aidanbell/schema-form",
+  },
   {
     label: "@aidanbell/schema-form",
     href: "https://www.npmjs.com/package/@aidanbell/schema-form",
@@ -35,6 +41,15 @@ const packageLinks = [
 
 function formatSchemaText(text: string) {
   return JSON.stringify(JSON.parse(text), null, 2);
+}
+
+/** SchemaForm re-parses at runtime; pass editor JSON (or raw text) so invalid input hits its error UI. */
+function schemaInputFromText(text: string): FormDefinition {
+  try {
+    return JSON.parse(text) as FormDefinition;
+  } catch {
+    return text as unknown as FormDefinition;
+  }
 }
 
 function IssueList({
@@ -73,18 +88,26 @@ function IssueList({
 
 export default function Playground() {
   const [schemaText, setSchemaText] = useState(defaultSchemaText);
+  const [sampleId, setSampleId] = useState(defaultSample.id);
   const [submittedValues, setSubmittedValues] = useState<Record<string, unknown> | null>(null);
   const [mode, setMode] = useState<PlaygroundMode>("styled");
   const [themeId, setThemeId] = useState(defaultTheme.id);
+  const [customControl, setCustomControl] = useState<CustomControlMode>("none");
 
   const parseResult = useMemo(() => parseFormDefinition(schemaText), [schemaText]);
   const theme = themePresets.find((preset) => preset.id === themeId) ?? defaultTheme;
+  const schemaInput = useMemo(() => schemaInputFromText(schemaText), [schemaText]);
 
-  const handleSampleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const sample = sampleSchemas.find((item) => item.id === event.target.value);
+  const loadSample = (id: string) => {
+    const sample = sampleSchemas.find((item) => item.id === id);
     if (!sample) return;
+    setSampleId(sample.id);
     setSchemaText(JSON.stringify(sample.schema, null, 2));
     setSubmittedValues(null);
+  };
+
+  const handleSampleChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    loadSample(event.target.value);
   };
 
   const handleFormat = () => {
@@ -98,7 +121,45 @@ export default function Playground() {
   const handleModeChange = (nextMode: PlaygroundMode) => {
     setMode(nextMode);
     setSubmittedValues(null);
+    if (nextMode === "headless") {
+      setCustomControl("none");
+    }
   };
+
+  const handleCustomControlChange = (next: CustomControlMode) => {
+    setCustomControl(next);
+    setSubmittedValues(null);
+    if (next !== "none") {
+      // Star demos target a `rating` number field — load Product feedback if needed.
+      const hasRating =
+        parseResult.success && parseResult.data.fields.some((field) => field.name === "rating");
+      if (!hasRating) {
+        loadSample(feedbackSample.id);
+      }
+    }
+  };
+
+  const fieldOverrides =
+    customControl === "component"
+      ? {
+          rating: { component: StarRatingControl },
+        }
+      : undefined;
+
+  const renderField =
+    customControl === "renderField"
+      ? (props: FieldControlProps, defaultRender: (props: FieldControlProps) => ReactNode) =>
+          props.field.name === "rating" ? <StarRatingRow {...props} /> : defaultRender(props)
+      : undefined;
+
+  const previewLabel =
+    mode === "headless"
+      ? "useSchemaForm + custom inputs"
+      : customControl === "component"
+        ? "fields.rating.component"
+        : customControl === "renderField"
+          ? "renderField → StarRatingRow"
+          : "<SchemaForm /> from schema-form-ui";
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
@@ -131,7 +192,7 @@ export default function Playground() {
           Sample
           <select
             className="h-9 rounded-md border border-neutral-200 bg-white px-3 text-sm dark:border-neutral-700 dark:bg-neutral-900"
-            defaultValue={defaultSample.id}
+            value={sampleId}
             onChange={handleSampleChange}
           >
             {sampleSchemas.map((sample) => (
@@ -177,20 +238,35 @@ export default function Playground() {
         </div>
 
         {mode === "styled" && (
-          <label className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-            Theme
-            <select
-              className="h-9 rounded-md border border-neutral-200 bg-white px-3 text-sm dark:border-neutral-700 dark:bg-neutral-900"
-              value={themeId}
-              onChange={(event) => setThemeId(event.target.value)}
-            >
-              {themePresets.map((preset) => (
-                <option key={preset.id} value={preset.id}>
-                  {preset.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          <>
+            <label className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+              Theme
+              <select
+                className="h-9 rounded-md border border-neutral-200 bg-white px-3 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+                value={themeId}
+                onChange={(event) => setThemeId(event.target.value)}
+              >
+                {themePresets.map((preset) => (
+                  <option key={preset.id} value={preset.id}>
+                    {preset.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+              Custom control
+              <select
+                className="h-9 rounded-md border border-neutral-200 bg-white px-3 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+                value={customControl}
+                onChange={(event) => handleCustomControlChange(event.target.value as CustomControlMode)}
+              >
+                <option value="none">None (default)</option>
+                <option value="component">Star rating (component)</option>
+                <option value="renderField">Star rating (renderField)</option>
+              </select>
+            </label>
+          </>
         )}
       </div>
 
@@ -226,30 +302,28 @@ export default function Playground() {
         </section>
         <div className="flex flex-col gap-2">
           <section className="flex min-h-[260px] h-fit min-w-0 flex-col overflow-hidden rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
-            <div className="mb-3 flex items-center justify-between">
+            <div className="mb-3 flex items-center justify-between gap-2">
               <h2 className="text-sm font-medium">Preview</h2>
-              <span className="text-xs text-neutral-400 dark:text-neutral-500">
-                {mode === "styled" ? "<SchemaForm /> from schema-form-ui" : "useSchemaForm + custom inputs"}
-              </span>
+              <span className="text-right text-xs text-neutral-400 dark:text-neutral-500">{previewLabel}</span>
             </div>
             <div className="min-h-0 min-w-0 flex-1 overflow-y-auto">
-              {parseResult.success ? (
-                mode === "styled" ? (
-                  <SchemaForm
-                    key={`styled-${themeId}-${schemaText}`}
-                    config={{
-                      schema: parseResult.data,
-                      ...(theme.classNames ? { classNames: theme.classNames } : {}),
-                    }}
-                    onSubmit={(values) => setSubmittedValues(values)}
-                  />
-                ) : (
-                  <HeadlessForm
-                    key={`headless-${schemaText}`}
-                    definition={parseResult.data}
-                    onSubmit={(values) => setSubmittedValues(values)}
-                  />
-                )
+              {mode === "styled" ? (
+                <SchemaForm
+                  key={`styled-${themeId}-${customControl}-${schemaText}`}
+                  config={{
+                    schema: schemaInput,
+                    ...(theme.classNames ? { classNames: theme.classNames } : {}),
+                    ...(fieldOverrides ? { fields: fieldOverrides } : {}),
+                  }}
+                  {...(renderField ? { renderField } : {})}
+                  onSubmit={(values) => setSubmittedValues(values)}
+                />
+              ) : parseResult.success ? (
+                <HeadlessForm
+                  key={`headless-${schemaText}`}
+                  definition={parseResult.data}
+                  onSubmit={(values) => setSubmittedValues(values)}
+                />
               ) : (
                 <div className="flex h-full items-center justify-center rounded-md border border-dashed border-neutral-200 p-6 text-sm text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">
                   Fix schema errors to render the form.
@@ -268,7 +342,14 @@ export default function Playground() {
         </div>
       </div>
 
-      {parseResult.success && <CodeSnippet schema={parseResult.data} mode={mode} themeClassNames={theme.classNames} />}
+      {parseResult.success && (
+        <CodeSnippet
+          schema={parseResult.data}
+          mode={mode}
+          themeClassNames={theme.classNames}
+          customControl={customControl}
+        />
+      )}
     </div>
   );
 }

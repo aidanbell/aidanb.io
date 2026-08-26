@@ -6,7 +6,7 @@ Personal site for Aidan Bell — full-stack engineer with a focus on dashboards 
 
 - **Vite 5** + **React 18** + **TypeScript**
 - **Tailwind CSS v4** (`@tailwindcss/vite`)
-- **React Router** — `/` and `/playground`
+- **React Router** — `/` and `/schema-form`
 - **React Hook Form** + **Valibot** — schema-driven form playground (`@aidanbell/schema-form`)
 - **CodeMirror** — JSON schema editor
 - **Lucide** — UI icons
@@ -41,7 +41,7 @@ npm run deploy         # build + publish dist/ to GitHub Pages
 | Route         | Content                     |
 | ------------- | --------------------------- |
 | `/`           | Home, About, Approach, Work |
-| `/playground` | Live schema → form demo     |
+| `/schema-form` | Live schema → form demo    |
 
 ## Theming
 
@@ -54,6 +54,8 @@ Edit a JSON form schema on the left; a validated React form renders on the right
 Supported field types: `string`, `email`, `password`, `number`, `boolean`, `select`, `radio`, `textarea`.
 
 Sample schemas are available from the dropdown (signup, feedback, validation, kitchen sink).
+
+Styled mode includes a **Custom control** selector that swaps the feedback `rating` field for a star control via `fields.rating.component` or `renderField` (the 0.2 extensibility APIs). Invalid schemas surface the package error UI in the preview.
 
 ## Deploy notes
 

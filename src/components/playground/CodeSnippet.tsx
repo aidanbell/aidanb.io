@@ -4,6 +4,8 @@ import type { FormDefinition } from "@aidanbell/schema-form";
 import type { SchemaFormClassNames } from "@aidanbell/schema-form-ui";
 import Button from "../ui/Button";
 
+export type CustomControlMode = "none" | "component" | "renderField";
+
 const STYLED_PACKAGES =
   "pnpm add @aidanbell/schema-form-ui @aidanbell/schema-form valibot react-hook-form @hookform/resolvers";
 const HEADLESS_PACKAGES = "pnpm add @aidanbell/schema-form valibot react-hook-form @hookform/resolvers";
@@ -16,8 +18,62 @@ function indentBlock(text: string, spaces: number) {
     .join("\n");
 }
 
-function buildStyledSnippet(schema: FormDefinition, themeClassNames: SchemaFormClassNames | null) {
+function buildStyledSnippet(
+  schema: FormDefinition,
+  themeClassNames: SchemaFormClassNames | null,
+  customControl: CustomControlMode,
+) {
   const schemaJson = indentBlock(JSON.stringify(schema, null, 2), 0);
+
+  if (customControl === "component") {
+    return `import { SchemaForm, type FieldControlProps } from '@aidanbell/schema-form-ui';
+import { Controller } from 'react-hook-form';
+
+const schema = ${schemaJson};
+
+function StarRatingControl(props: FieldControlProps) {
+  // Wire value with Controller — see playground StarRatingControl.tsx
+  return <Controller name={props.field.name} control={props.form.control} render={() => /* stars */ null} />;
+}
+
+export function MyForm() {
+  return (
+    <SchemaForm
+      config={{
+        schema,
+        fields: { rating: { component: StarRatingControl } },
+      }}
+      onSubmit={(values) => console.log(values)}
+    />
+  );
+}
+`;
+  }
+
+  if (customControl === "renderField") {
+    return `import { SchemaForm, type FieldControlProps } from '@aidanbell/schema-form-ui';
+
+const schema = ${schemaJson};
+
+function StarRatingRow(props: FieldControlProps) {
+  // Own the full row (label, control, error) — see playground StarRatingControl.tsx
+  return <div>{/* custom rating row */}</div>;
+}
+
+export function MyForm() {
+  return (
+    <SchemaForm
+      config={{ schema }}
+      renderField={(props, defaultRender) =>
+        props.field.name === 'rating' ? <StarRatingRow {...props} /> : defaultRender(props)
+      }
+      onSubmit={(values) => console.log(values)}
+    />
+  );
+}
+`;
+  }
+
   const config = themeClassNames
     ? `{\n        schema,\n        classNames: ${indentBlock(JSON.stringify(themeClassNames, null, 2), 8)},\n      }`
     : "{ schema }";
@@ -98,22 +154,29 @@ type CodeSnippetProps = {
   schema: FormDefinition;
   mode: "styled" | "headless";
   themeClassNames: SchemaFormClassNames | null;
+  customControl: CustomControlMode;
 };
 
-export default function CodeSnippet({ schema, mode, themeClassNames }: CodeSnippetProps) {
+export default function CodeSnippet({ schema, mode, themeClassNames, customControl }: CodeSnippetProps) {
   const install = mode === "styled" ? STYLED_PACKAGES : HEADLESS_PACKAGES;
-  const snippet = mode === "styled" ? buildStyledSnippet(schema, themeClassNames) : buildHeadlessSnippet(schema);
+  const snippet =
+    mode === "styled" ? buildStyledSnippet(schema, themeClassNames, customControl) : buildHeadlessSnippet(schema);
+
+  const blurb =
+    mode === "headless"
+      ? "The headless hook with your current schema — bring your own inputs."
+      : customControl === "component"
+        ? "Per-field control swap via config.fields.rating.component (label/error chrome stays)."
+        : customControl === "renderField"
+          ? "Full-row escape hatch via renderField — defaultRender for every other field."
+          : "The styled component, with your current schema and theme.";
 
   return (
     <section className="mt-6 rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <div>
           <h2 className="text-sm font-medium">Use it in your app</h2>
-          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-            {mode === "styled"
-              ? "The styled component, with your current schema and theme."
-              : "The headless hook with your current schema — bring your own inputs."}
-          </p>
+          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{blurb}</p>
         </div>
         <CopyButton text={snippet} label="Copy code" />
       </div>

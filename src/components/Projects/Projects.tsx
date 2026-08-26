@@ -62,13 +62,13 @@ const projects: Project[] = [
     stack: ["React", "TypeScript", "Valibot", "React Hook Form", "Tailwind CSS", "Base UI"],
     highlights: [
       "Headless @aidanbell/schema-form: parse, validate, and useSchemaForm without owning the pixels",
-      "Styled @aidanbell/schema-form-ui: drop-in <SchemaForm /> with classNames theming and accessible defaults",
-      "Live playground on this site dogfoods both packages — schema in, form out",
+      "Styled @aidanbell/schema-form-ui: drop-in <SchemaForm /> with classNames, custom controls, and renderField",
+      "Live playground dogfoods 0.2 — default forms, star-rating overrides, and invalid-schema error UI",
     ],
     links: [
       {
         label: "Open playground",
-        to: "/playground",
+        to: "/schema-form",
         icon: ArrowUpRight,
       },
       {

@@ -18,8 +18,8 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@aidanbell/schema-form": "^0.1.1",
-    "@aidanbell/schema-form-ui": "^0.1.1",
+    "@aidanbell/schema-form": "^0.2.0",
+    "@aidanbell/schema-form-ui": "^0.2.0",
     "@codemirror/lang-json": "^6.0.2",
     "@codemirror/theme-one-dark": "^6.1.3",
     "@hookform/resolvers": "^5.9.1",
