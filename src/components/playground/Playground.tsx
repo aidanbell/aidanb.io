@@ -131,8 +131,7 @@ export default function Playground() {
     setSubmittedValues(null);
     if (next !== "none") {
       // Star demos target a `rating` number field — load Product feedback if needed.
-      const hasRating =
-        parseResult.success && parseResult.data.fields.some((field) => field.name === "rating");
+      const hasRating = parseResult.success && parseResult.data.fields.some((field) => field.name === "rating");
       if (!hasRating) {
         loadSample(feedbackSample.id);
       }

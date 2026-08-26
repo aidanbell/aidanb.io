@@ -38,10 +38,10 @@ npm run deploy         # build + publish dist/ to GitHub Pages
 
 ## Site map
 
-| Route         | Content                     |
-| ------------- | --------------------------- |
-| `/`           | Home, About, Approach, Work |
-| `/schema-form` | Live schema → form demo    |
+| Route          | Content                     |
+| -------------- | --------------------------- |
+| `/`            | Home, About, Approach, Work |
+| `/schema-form` | Live schema → form demo     |
 
 ## Theming
 

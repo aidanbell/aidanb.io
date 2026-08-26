@@ -65,7 +65,8 @@ export const sampleSchemas: SampleSchema[] = [
     schema: {
       schemaVersion: 1,
       title: "Product feedback",
-      description: "Tell us what is working and what is not. Use Custom control → Star rating to swap the number input.",
+      description:
+        "Tell us what is working and what is not. Use Custom control → Star rating to swap the number input.",
       fields: [
         {
           name: "rating",

@@ -15,7 +15,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "verify": "npm run typecheck && npm run lint && npm run format"
   },
   "dependencies": {
     "@aidanbell/schema-form": "^0.2.0",
