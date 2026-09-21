@@ -4,6 +4,7 @@ import Nav from "./components/Nav/Nav";
 import Footer from "./components/Footer/Footer";
 import ScrollToHash from "./components/ScrollToHash";
 import HomePage from "./pages/HomePage";
+import TechnicalHome from "./pages/TechnicalHome";
 
 const PlaygroundPage = lazy(() => import("./pages/PlaygroundPage"));
 
@@ -16,6 +17,7 @@ function App() {
         <Suspense fallback={<div className="px-6 py-20 text-sm text-neutral-500">Loading...</div>}>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/technical" element={<TechnicalHome />} />
             <Route path="/schema-form" element={<PlaygroundPage />} />
           </Routes>
         </Suspense>

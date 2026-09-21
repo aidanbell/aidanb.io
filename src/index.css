@@ -9,6 +9,18 @@
   --font-sans: "Wix Madefor Display", system-ui, sans-serif;
   --font-display: "Newsreader", "Times New Roman", serif;
   --animate-fade-up: fade-up 0.7s ease-out both;
+  --animate-blink: blink 1.1s steps(2, jump-none) infinite;
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes fade-up {
