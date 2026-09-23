@@ -9,7 +9,7 @@ const FAINT = "text-neutral-500 dark:text-neutral-400";
 const RULE = "border-neutral-900/25 dark:border-neutral-100/25";
 const RULE_SOFT = "border-neutral-900/15 dark:border-neutral-100/15";
 
-const DATE = new Date().toLocaleDateString("en-GB").replace(/\//g, ".");
+const DATE = "23.09.2026";
 
 type TechLink = { label: string; href?: string; to?: string; download?: boolean };
 
@@ -493,9 +493,11 @@ export default function TechnicalHome() {
             <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ cat /etc/build-info</p>
             <div className="mt-2 space-y-1">
               <SpecLine k="SITE">REACT 18 / REACT ROUTER / TAILWIND CSS 4</SpecLine>
-              <SpecLine k="TYPE">TYPESCRIPT 5.9 / INTEL ONE MONO</SpecLine>
+              <SpecLine k="TYPE">TYPESCRIPT 5.9</SpecLine>
               <SpecLine k="REQUESTS">NO ANALYTICS, NO API</SpecLine>
               <SpecLine k="ROUTES">/ + /SCHEMA-FORM (LAZY)</SpecLine>
+              <SpecLine k="HOME JS">67 KB GZIP</SpecLine>
+              <SpecLine k="SCHEMA_FORM JS">144 KB GZIP</SpecLine>
               <SpecLine k="CONFIG">NON-NEGOTIABLES BASELINE ( SEE /04 )</SpecLine>
               <SpecLine k="HOST">GITHUB PAGES</SpecLine>
               <SpecLine k="REVISION">{DATE}</SpecLine>
