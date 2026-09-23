@@ -30,18 +30,6 @@ export default function Nav() {
       </Link>
       <div className="flex items-center gap-6">
         <nav className="hidden gap-6 text-nowrap sm:flex" aria-label="Main">
-          <NavLink to="/" hash="#home">
-            Home
-          </NavLink>
-          <NavLink to="/" hash="#about">
-            About
-          </NavLink>
-          <NavLink to="/" hash="#approach">
-            Approach
-          </NavLink>
-          <NavLink to="/" hash="#work">
-            Work
-          </NavLink>
           <NavLink to="/schema-form">schema-form</NavLink>
         </nav>
         <ThemeToggle />

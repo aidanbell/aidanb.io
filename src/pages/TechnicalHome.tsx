@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import ASCIILogo from "../components/TechnicalHome/ASCIILogo";
+import { ASCIILogo } from "../components/TechnicalHome/ASCIILogo";
 import resume from "../assets/aidan_bell26.pdf";
 
 /* Monochrome palette only — ink, faint ink, and hairline rules. */
@@ -8,6 +8,8 @@ const INK = "text-neutral-900 dark:text-neutral-100";
 const FAINT = "text-neutral-500 dark:text-neutral-400";
 const RULE = "border-neutral-900/25 dark:border-neutral-100/25";
 const RULE_SOFT = "border-neutral-900/15 dark:border-neutral-100/15";
+
+const DATE = new Date().toLocaleDateString("en-GB").replace(/\//g, ".");
 
 type TechLink = { label: string; href?: string; to?: string; download?: boolean };
 
@@ -22,7 +24,7 @@ type TechProject = {
   links: TechLink[];
 };
 
-const projects: TechProject[] = [
+const featuredProjects: TechProject[] = [
   {
     fig: "01",
     name: "CAMPAIGN DASHBOARD MODERNIZATION",
@@ -51,7 +53,7 @@ const projects: TechProject[] = [
       "STYLED: DROP-IN <SchemaForm /> W/ CLASSNAMES + CUSTOM CONTROLS",
       "LIVE PLAYGROUND DOGFOODS 0.2 ON THIS SITE",
     ],
-    stack: ["REACT", "TYPESCRIPT", "VALIBOT", "REACT HOOK FORM", "TAILWIND", "BASE UI"],
+    stack: ["REACT", "TYPESCRIPT", "VALIBOT", "REACT HOOK FORM", "TAILWIND"],
     links: [
       { label: "PLAYGROUND", to: "/schema-form" },
       { label: "NPM:SCHEMA-FORM", href: "https://www.npmjs.com/package/@aidanbell/schema-form" },
@@ -59,13 +61,15 @@ const projects: TechProject[] = [
       { label: "GITHUB", href: "https://github.com/aidanbell/schema-form" },
     ],
   },
+];
+
+const projects: TechProject[] = [
   {
     fig: "03",
     name: "CAGE PAGE",
     status: "SHIPPED",
     role: "FULL-STACK",
-    summary:
-      "Niche content app: OAuth, Node/Express API, MongoDB, third-party movie data. Searchable catalogs and form-heavy rule entry on top of a full auth and data stack.",
+    summary: "Searchable catalogs and form-heavy rule entry on top of a full auth and data stack.",
     notes: ["OAUTH-BACKED FLOWS + PROTECTED ROUTES", "REST API + TMDB INTEGRATION"],
     stack: ["REACT", "NODE", "EXPRESS", "MONGODB"],
     links: [{ label: "GITHUB", href: "https://github.com/aidanbell/cage-page" }],
@@ -75,8 +79,7 @@ const projects: TechProject[] = [
     name: "MARKDOWNER98",
     status: "SHIPPED - HACKATHON WINNER",
     role: "FRONT-END",
-    summary:
-      "Mintbean Hackathon winner. Markdown editor with live preview, synced scrolling, and PDF export — editor UX with preview state in lockstep with input.",
+    summary: "Mintbean Hackathon winner. Live markdown editor with a 90s flavor.",
     notes: ["LIVE PREVIEW W/ SIMULTANEOUS SCROLL", "EXPORT-TO-PDF FLOW"],
     stack: ["REACT", "MARKDOWN", "NODE"],
     links: [
@@ -90,32 +93,31 @@ const principles = [
   {
     title: "ACCESSIBLE BY DEFAULT",
     body: "Labels, error messaging, focus management, and keyboard support are part of the design — not polish at the end.",
+    ref: "REF: FIG. 02",
   },
   {
     title: "SCHEMA-DRIVEN WHEN IT SCALES",
     body: "For form-heavy products, shared schemas drive UI and validation, and stay aligned with the API.",
+    ref: "REF: FIG. 02",
   },
   {
     title: "STATE YOU CAN TRUST",
     body: "Loading, empty, error, and dirty states get explicit treatment — on the client and at the API boundary.",
+    ref: "REF: FIG. 01",
   },
   {
     title: "SHIP THE WHOLE SURFACE",
     body: "Reusable UI primitives, wired to real backends: auth, data models, and the contracts that keep the interface honest.",
+    ref: "REF: FIG. 01",
   },
 ];
 
 const indexEntries = [
-  { key: "01", label: "PROFILE", href: "#profile" },
-  { key: "02", label: "SELECTED WORK", href: "#work" },
-  { key: "03", label: "METHOD", href: "#method" },
-  { key: "04", label: "COLOPHON", href: "#colophon" },
-];
-
-const stats = [
-  { value: "2", label: "NPM PACKAGES PUBLISHED" },
-  { value: "~50%", label: "DEPENDENCIES REMOVED, LEGACY REBUILD" },
-  { value: "30->5", label: "DEPLOY MINUTES, BEFORE/AFTER" },
+  { key: "01", label: "SELECTED WORK", href: "#work" },
+  { key: "02", label: "METHOD", href: "#method" },
+  { key: "03", label: "PROJECTS", href: "#projects" },
+  { key: "04", label: "NON-NEGOTIABLES", href: "#non-negotiables" },
+  { key: "05", label: "COLOPHON", href: "#colophon" },
 ];
 
 function SectionSpine({ index, title, count }: { index: string; title: string; count?: number }) {
@@ -138,15 +140,17 @@ function SpineSection({
   title,
   count,
   children,
+  className,
 }: {
   id: string;
   index: string;
   title: string;
   count?: number;
   children: ReactNode;
+  className?: string;
 }) {
   return (
-    <section id={id} className="grid scroll-mt-20 grid-cols-[1.25rem_1fr] gap-x-4 pt-12 sm:gap-x-7">
+    <section id={id} className={`grid scroll-mt-20 grid-cols-[1.25rem_1fr] gap-x-4 pt-8 ${className ?? ""}`}>
       <SectionSpine index={index} title={title} count={count} />
       <div className="min-w-0">{children}</div>
     </section>
@@ -155,11 +159,9 @@ function SpineSection({
 
 function KV({ k, children }: { k: string; children: ReactNode }) {
   return (
-    <div
-      className={`grid grid-cols-[7rem_1fr] gap-3 border-b border-dotted ${RULE_SOFT} py-2 sm:grid-cols-[10rem_1fr]`}
-    >
+    <div className={`grid grid-cols-[7rem_1fr] gap-3 border-b border-dotted ${RULE_SOFT} py-2 sm:grid-cols-[6rem_1fr]`}>
       <dt className={`${FAINT} text-[11px] tracking-[0.15em]`}>{k}</dt>
-      <dd className={`${INK} text-xs leading-relaxed`}>{children}</dd>
+      <dd className={`${INK} text-xs leading-relaxed text-right`}>{children}</dd>
     </div>
   );
 }
@@ -181,6 +183,30 @@ function BracketLink({ label, href, to, download }: TechLink) {
   );
 }
 
+/* Reticle corner brackets — parent must be `relative`. */
+function Reticle() {
+  const corner = "pointer-events-none absolute size-2.5 border-neutral-900/60 dark:border-neutral-100/60";
+  return (
+    <span aria-hidden="true">
+      <span className={`${corner} -top-px -left-px border-t-2 border-l-2`} />
+      <span className={`${corner} -top-px -right-px border-t-2 border-r-2`} />
+      <span className={`${corner} -bottom-px -left-px border-b-2 border-l-2`} />
+      <span className={`${corner} -bottom-px -right-px border-b-2 border-r-2`} />
+    </span>
+  );
+}
+
+/* Ruler tick strip — minor ticks every 10px, major every 50px. */
+function Ruler() {
+  return (
+    <div aria-hidden="true" className="relative mt-3 h-2.5 overflow-hidden opacity-50">
+      <div className="absolute inset-x-0 bottom-0 h-1.5 bg-[repeating-linear-gradient(90deg,currentColor_0,currentColor_1px,transparent_1px,transparent_10px)]" />
+      <div className="absolute inset-x-0 bottom-0 h-2.5 bg-[repeating-linear-gradient(90deg,currentColor_0,currentColor_1px,transparent_1px,transparent_50px)]" />
+      <div className="absolute inset-x-0 bottom-0 border-b border-current" />
+    </div>
+  );
+}
+
 export default function TechnicalHome() {
   return (
     <div className={`relative overflow-hidden font-mono ${INK}`}>
@@ -195,19 +221,34 @@ export default function TechnicalHome() {
         className="pointer-events-none absolute inset-0 hidden opacity-[0.05] dark:block [background-image:repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(250,250,250,0.7)_2px,rgba(250,250,250,0.7)_3px)]"
       />
 
-      <div className="relative mx-auto max-w-3xl px-6 pt-12 pb-20">
+      <div className="relative mx-auto max-w-6xl px-6 pt-12 pb-20">
         {/* ── Masthead ─────────────────────────────── */}
-        <header className={`border-b ${RULE} pb-6`}>
+        <header id="profile" className={`scroll-mt-20 border-b ${RULE} pb-6`}>
           <div className={`flex flex-wrap items-baseline justify-between gap-2 text-[11px] tracking-[0.2em] ${FAINT}`}>
             <span>AIDANB.IO ( TECHNICAL )</span>
-            <span>REV. 2026.09.21</span>
+            <span>REV. {DATE}</span>
           </div>
-          <div className="flex flex-row">
-            <div className="mt-6">
+          <Ruler />
+          <div className="flex flex-col gap-4 md:flex-row">
+            <div className="mt-6 w-full md:w-[60%]">
               <ASCIILogo />
+
+              {/* Stats strip */}
+              <div className={`border ${RULE} p-4 mt-6`}>
+                <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ cat /etc/profile</p>
+                <pre className="mt-2 overflow-x-auto text-[10px] leading-relaxed tracking-[0.05em] sm:text-[11px]">
+                  {`FOCUS ......... COMPLEX DASHBOARDS / FORM-HEAVY UI /
+                SCHEMA-DRIVEN TOOLING
+BELIEF ........ GOOD CODE AND GOOD UI SHOULD BOTH
+                EXPLAIN THEMSELVES.
+CURRENT ....... SCHEMA-FORM — A HEADLESS, SCHEMA-DRIVEN
+                FORM LIBRARY + STYLED COMPANION. `}
+                  <BracketLink label="TRY IT" to="/schema-form" />
+                </pre>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <h1 className="mt-6 text-2xl font-bold tracking-[0.25em] sm:text-3xl">
+            <div className="flex w-full flex-col justify-between md:w-[40%]">
+              <h1 className="mt-2 text-2xl font-bold tracking-[0.25em] sm:text-3xl md:mt-6">
                 AIDAN BELL
                 <span
                   aria-hidden="true"
@@ -217,13 +258,37 @@ export default function TechnicalHome() {
               <p className={`mt-2 text-xs tracking-[0.2em] ${FAINT}`}>
                 FULL-STACK ENGINEER / DASHBOARDS + FORM-HEAVY UI
               </p>
+              <div className={` w-full p-2 border-b border-dotted ${RULE}`} />
+              {/* Barcode strip */}
+              <div
+                aria-hidden="true"
+                className="mt-4 h-4 bg-[repeating-linear-gradient(90deg,currentColor_0,currentColor_2px,transparent_2px,transparent_4px,currentColor_4px,currentColor_9px,transparent_9px,transparent_11px,currentColor_11px,currentColor_12px,transparent_12px,transparent_17px)]"
+              />
+              {/* Calibration strip */}
+              <div
+                aria-hidden="true"
+                className={`mt-3 overflow-hidden text-[10px] tracking-[0.3em] whitespace-nowrap select-none ${FAINT} text-center`}
+              >
+                ░░▒▒▓▓██▓▓▒▒░░ CAL. STRIP 100% ░░▒▒▓▓██▓▓▒▒░░
+              </div>
+              <dl className="mt-auto">
+                <KV k="LOCATION">CAN/USA</KV>
+                <KV k="EXPERIENCE">&gt;7 YEARS</KV>
+                <KV k="CONTACT">
+                  <span className="flex justify-end flex-wrap gap-x-4 gap-y-1">
+                    <BracketLink label="GITHUB" href="https://github.com/aidanbell" />
+                    <BracketLink label="LINKEDIN" href="https://www.linkedin.com/in/aidanbell0/" />
+                    <BracketLink label="RESUME.PDF" href={resume} download />
+                  </span>
+                </KV>
+              </dl>
             </div>
           </div>
         </header>
 
         {/* ── Index ────────────────────────────────── */}
         <nav aria-label="Page index" className={`border-b ${RULE} py-5`}>
-          <ul className="grid grid-cols-2 gap-x-8 gap-y-2 sm:grid-cols-4">
+          <ul className="grid grid-cols-2 gap-x-8 gap-y-2 sm:grid-cols-3 md:grid-cols-5">
             {indexEntries.map((entry) => (
               <li key={entry.key}>
                 <a
@@ -239,103 +304,160 @@ export default function TechnicalHome() {
             ))}
           </ul>
         </nav>
-
-        {/* ── 01 / Profile ─────────────────────────── */}
-        <SpineSection id="profile" index="01" title="PROFILE">
-          <dl>
-            <KV k="NAME">AIDAN BELL</KV>
-            <KV k="ROLE">FULL-STACK ENGINEER</KV>
-            <KV k="FOCUS">COMPLEX DASHBOARDS / FORM-HEAVY UI / SCHEMA-DRIVEN TOOLING</KV>
-            <KV k="BELIEF">GOOD CODE AND GOOD UI SHOULD BOTH EXPLAIN THEMSELVES.</KV>
-            <KV k="CURRENT">
-              SCHEMA-FORM — A HEADLESS, SCHEMA-DRIVEN FORM LIBRARY + STYLED COMPANION.{" "}
-              <BracketLink label="TRY IT" to="/schema-form" />
-            </KV>
-            <KV k="CONTACT">
-              <span className="flex flex-wrap gap-x-4 gap-y-1">
-                <BracketLink label="GITHUB" href="https://github.com/aidanbell" />
-                <BracketLink label="LINKEDIN" href="https://www.linkedin.com/in/aidanbell0/" />
-                <BracketLink label="RESUME.PDF" href={resume} download />
-              </span>
-            </KV>
-          </dl>
-
-          {/* Stats strip */}
-          <div className={`mt-8 grid border ${RULE} sm:grid-cols-3`}>
-            {stats.map((stat, i) => (
-              <div key={stat.label} className={`p-4 ${i > 0 ? `border-t sm:border-t-0 sm:border-l ${RULE}` : ""}`}>
-                <div className="text-2xl font-bold tracking-tight">{stat.value}</div>
-                <div className={`mt-1 text-[10px] tracking-[0.15em] ${FAINT}`}>{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </SpineSection>
-
-        {/* ── 02 / Selected work ───────────────────── */}
-        <SpineSection id="work" index="02" title="SELECTED WORK" count={projects.length}>
-          <div className="space-y-6">
-            {projects.map((project) => (
-              <article key={project.fig} className={`border ${RULE}`}>
-                <div className={`flex flex-wrap items-baseline justify-between gap-2 border-b ${RULE_SOFT} px-4 py-2`}>
-                  <span className="text-[11px] tracking-[0.2em]">
-                    <span className={FAINT}>[ FIG. {project.fig} ]</span>{" "}
-                    <span className="font-bold">{project.name}</span>
-                  </span>
-                  <span className={`text-[10px] tracking-[0.15em] ${FAINT}`}>
-                    {project.role} — {project.status}
-                  </span>
-                </div>
-                <div className="px-4 py-3">
-                  <p className={`text-xs leading-relaxed ${FAINT}`}>{project.summary}</p>
-                  <ul className="mt-3 space-y-1">
-                    {project.notes.map((note) => (
-                      <li key={note} className="flex gap-2 text-[11px] leading-relaxed tracking-[0.05em]">
-                        <span className={FAINT} aria-hidden="true">
-                          {">"}
-                        </span>
-                        <span>{note}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className={`mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[10px] tracking-[0.1em] ${FAINT}`}>
-                    {project.stack.map((tech) => (
-                      <span key={tech}>[{tech}]</span>
-                    ))}
-                  </div>
-                  {project.links.length > 0 && (
-                    <div className={`mt-3 flex flex-wrap gap-x-4 gap-y-1 border-t border-dotted ${RULE_SOFT} pt-3`}>
-                      {project.links.map((link) => (
-                        <BracketLink key={link.label} {...link} />
-                      ))}
+        <main className="grid grid-cols-1 gap-x-8 md:grid-cols-[minmax(0,7fr)_minmax(0,3fr)]">
+          <div className="flex flex-col gap-4 w-full justify-between">
+            {/* ── 01 / Selected work ───────────────────── */}
+            <SpineSection id="work" index="01" title="SELECTED WORK" count={featuredProjects.length}>
+              <div className="space-y-6">
+                {featuredProjects.map((project) => (
+                  <article key={project.fig} className={`relative border ${RULE}`}>
+                    <Reticle />
+                    <div
+                      className={`flex flex-wrap items-baseline justify-between gap-2 border-b ${RULE_SOFT} px-4 py-2`}
+                    >
+                      <span className="text-[11px] tracking-[0.2em]">
+                        <span className={FAINT}>[ FIG. {project.fig} ]</span>{" "}
+                        <span className="font-bold">{project.name}</span>
+                      </span>
+                      <span className={`text-[10px] tracking-[0.15em] ${FAINT}`}>
+                        {project.role} — {project.status}
+                      </span>
                     </div>
-                  )}
-                </div>
-              </article>
-            ))}
+                    <p className={`text-xs leading-relaxed px-4 py-3 ${FAINT}`}>{project.summary}</p>
+                    <div className="flex flex-row gap-4">
+                      <div className="px-4">
+                        <ul className="mt-3 space-y-1">
+                          {project.notes.map((note) => (
+                            <li key={note} className="flex gap-2 text-[11px] leading-relaxed tracking-[0.05em]">
+                              <span className={FAINT} aria-hidden="true">
+                                {">"}
+                              </span>
+                              <span>{note}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        <div className={`mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[10px] tracking-[0.1em] ${FAINT}`}>
+                          {project.stack.map((tech) => (
+                            <span key={tech}>[{tech}]</span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {project.links.length > 0 && (
+                        <div className={`mt-3 flex flex-col gap-x-4 gap-y-1 border-l border-dotted ${RULE_SOFT} pl-3`}>
+                          {project.links.map((link) => (
+                            <BracketLink key={link.label} {...link} />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </SpineSection>
+            {/* ── 04 / Projects ledger ─────────────────── */}
+            <SpineSection id="projects" index="03" title="PROJECTS" count={projects.length} className="pt-0 mt-0">
+              <div className={`border ${RULE} p-4`}>
+                <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ ls -la ~/projects</p>
+                <ul className="mt-3 space-y-2">
+                  {projects.map((project) => (
+                    <li
+                      key={project.fig}
+                      className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[11px] tracking-[0.05em]"
+                    >
+                      <span className={FAINT}>[{project.fig}]</span>
+                      <span className="font-bold tracking-[0.1em]">{project.name}</span>
+                      <span
+                        aria-hidden="true"
+                        className={`min-w-8 flex-1 -translate-y-[0.25em] border-b border-dotted ${RULE_SOFT}`}
+                      />
+                      <span className={`text-[10px] tracking-[0.15em] ${FAINT}`}>
+                        {project.role} — {project.status}
+                      </span>
+                      <span className="flex gap-x-3">
+                        {project.links.map((link) => (
+                          <BracketLink key={link.label} {...link} />
+                        ))}
+                      </span>
+                      <span className={`ml-10 basis-full text-[10px] tracking-[0.15em] ${FAINT}`}>
+                        {project.summary}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </SpineSection>
+          </div>
+          {/* ── 03 / Method ──────────────────────────── */}
+          <SpineSection id="method" index="02" title="METHOD" count={principles.length}>
+            <ol className="flex flex-col gap-4">
+              {principles.map((principle, i) => (
+                <li key={principle.title} className={`border ${RULE} p-4`}>
+                  <h3 className="text-[11px] font-bold tracking-[0.2em]">
+                    <span className={`${FAINT} font-normal`}>{String(i + 1).padStart(2, "0")}.</span> {principle.title}
+                  </h3>
+                  <p className={`mt-2 text-xs leading-relaxed ${FAINT}`}>{principle.body}</p>
+                  <p className={`mt-2 text-right text-[10px] tracking-[0.2em] ${FAINT}`}>{principle.ref}</p>
+                </li>
+              ))}
+            </ol>
+          </SpineSection>
+        </main>
+
+        {/* ── 05 / Non-negotiables ─────────────────── */}
+        <SpineSection id="non-negotiables" index="04" title="NON-NEGOTIABLES">
+          <div className={`relative border ${RULE} p-4`}>
+            <Reticle />
+            <div className="grid gap-x-8 gap-y-6 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+              <div className="min-w-0">
+                <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ tree ~/non-negotiables</p>
+                <pre className="mt-2 overflow-x-auto text-[11px] leading-relaxed tracking-[0.05em]">
+                  {`.
+└── configs/
+    ├── agents/
+    │   ├── AGENTS.md
+    │   └── CLAUDE.md
+    ├── editor/
+    │   └── .editorconfig
+    ├── eslint/
+    │   └── eslint.config.mjs
+    ├── prettier/
+    │   ├── .prettierignore
+    │   └── .prettierrc.json
+    └── typescript/
+        └──  tsconfig.base.json`}
+                </pre>
+              </div>
+              <div
+                className={`min-w-0 border-t border-dotted pt-4 md:border-t-0 md:border-l md:pt-0 md:pl-6 ${RULE_SOFT}`}
+              >
+                <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ which non-negotiables</p>
+                <a
+                  href="https://github.com/aidanbell/non-negotiables"
+                  className="underline decoration-dotted underline-offset-4 hover:decoration-solid"
+                >
+                  <pre className="mt-2 overflow-x-auto text-[11px] leading-relaxed tracking-[0.05em] pb-2">
+                    {`https://github.com/aidanbell/non-negotiables`}
+                  </pre>
+                </a>
+                <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ cat README.md</p>
+                <pre className="mt-2 overflow-x-auto text-[11px] leading-relaxed tracking-[0.05em] pb-2">
+                  {`A repository of configs that are difficult to work without for the tools we use daily`}
+                </pre>
+                <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ head -n 4 AGENTS.md</p>
+                <pre className="mt-2 overflow-x-auto text-[11px] leading-relaxed tracking-[0.05em] pb-2">
+                  {`01. READ THE FILE BEFORE EDITING IT.
+02. TYPECHECK + LINT + FORMAT, EVERY TURN.
+03. PREFER THE EXISTING PATTERN OVER A NEW ONE.
+04. SMALL DIFFS. REAL NAMES. NO DEAD CODE.`}
+                </pre>
+              </div>
+            </div>
           </div>
         </SpineSection>
 
-        {/* ── 03 / Method ──────────────────────────── */}
-        <SpineSection id="method" index="03" title="METHOD" count={principles.length}>
-          <ol className={`grid border ${RULE} sm:grid-cols-2`}>
-            {principles.map((principle, i) => (
-              <li
-                key={principle.title}
-                className={`p-4 ${i > 0 ? `border-t ${RULE}` : ""} ${i % 2 === 1 ? `sm:border-l` : ""} ${
-                  i === 1 ? "sm:border-t-0" : ""
-                } ${RULE}`}
-              >
-                <h3 className="text-[11px] font-bold tracking-[0.2em]">
-                  <span className={FAINT}>{String(i + 1).padStart(2, "0")}.</span> {principle.title}
-                </h3>
-                <p className={`mt-2 text-xs leading-relaxed ${FAINT}`}>{principle.body}</p>
-              </li>
-            ))}
-          </ol>
-        </SpineSection>
-
-        {/* ── 04 / Colophon ────────────────────────── */}
-        <SpineSection id="colophon" index="04" title="COLOPHON">
+        {/* ── 06 / Colophon ────────────────────────── */}
+        <SpineSection id="colophon" index="05" title="COLOPHON">
           <div className={`border ${RULE} p-4`}>
             <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ cat /etc/build-info</p>
             <pre className="mt-2 overflow-x-auto text-[11px] leading-relaxed tracking-[0.05em]">
@@ -343,8 +465,9 @@ export default function TechnicalHome() {
 STYLES ......... TAILWIND CSS 4 (MONOCHROME ONLY)
 LANG ........... TYPESCRIPT 5.9
 FORMS .......... @AIDANBELL/SCHEMA-FORM 0.2
+CONFIG ......... NON-NEGOTIABLES BASELINE ( SEE /04 )
 HOST ........... GITHUB PAGES
-REVISION ....... 2026.09.21`}
+REVISION ....... ${DATE}`}
             </pre>
             {/* Barcode strip */}
             <div
