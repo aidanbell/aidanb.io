@@ -1,5 +1,4 @@
 import { Controller } from "react-hook-form";
-import { Star } from "lucide-react";
 import type { FieldControlProps } from "@aidanbell/schema-form-ui";
 import { cn } from "../../lib/cn";
 
@@ -52,13 +51,11 @@ export function StarRatingControl({
                   aria-label={`${starValue} of ${max}`}
                   disabled={disabled}
                   onClick={() => rhf.onChange(starValue)}
-                  className="rounded p-0.5 text-neutral-300 transition-colors hover:text-amber-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 disabled:pointer-events-none disabled:opacity-50 dark:text-neutral-600 dark:hover:text-amber-400 dark:focus-visible:ring-neutral-500"
+                  className="rounded p-0.5 text-xl leading-none text-neutral-300 transition-colors hover:text-amber-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 disabled:pointer-events-none disabled:opacity-50 dark:text-neutral-600 dark:hover:text-amber-400 dark:focus-visible:ring-neutral-500"
                 >
-                  <Star
-                    className={cn("size-6", selected && "fill-amber-400 text-amber-400")}
-                    strokeWidth={1.5}
-                    aria-hidden="true"
-                  />
+                  <span aria-hidden="true" className={cn(selected && "text-amber-400", "text-4xl")}>
+                    {selected ? "★" : "☆"}
+                  </span>
                 </button>
               );
             })}

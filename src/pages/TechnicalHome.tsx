@@ -66,6 +66,16 @@ const featuredProjects: TechProject[] = [
 const projects: TechProject[] = [
   {
     fig: "03",
+    name: "NUTS",
+    status: "ACTIVE DEV",
+    role: "GAME",
+    summary: "Incremental game about squirrels and nuts in the apocalypse.",
+    notes: ["FUN, SIMPLE, ADDICTIVE"],
+    stack: ["SOLID JS", "VITE", "TAILWIND"],
+    links: [{ label: "GITHUB", href: "https://github.com/aidanbell/Nuts" }],
+  },
+  {
+    fig: "04",
     name: "CAGE PAGE",
     status: "SHIPPED",
     role: "FULL-STACK",
@@ -75,7 +85,7 @@ const projects: TechProject[] = [
     links: [{ label: "GITHUB", href: "https://github.com/aidanbell/cage-page" }],
   },
   {
-    fig: "04",
+    fig: "05",
     name: "MARKDOWNER98",
     status: "SHIPPED - HACKATHON WINNER",
     role: "FRONT-END",
@@ -157,6 +167,21 @@ function SpineSection({
   );
 }
 
+/* Key stays fixed; the dotted leader and value reflow with the column width. */
+function SpecLine({ k, children }: { k: string; children: ReactNode }) {
+  return (
+    <div className="grid grid-cols-[8.5rem_minmax(0,1fr)] gap-x-3 text-[11px] leading-relaxed tracking-[0.05em]">
+      <span className="flex items-baseline gap-2">
+        <span className="shrink-0">{k}</span>
+        <span aria-hidden="true" className={`min-w-2 flex-1 text-clip overflow-hidden whitespace-nowrap`}>
+          ...............................................
+        </span>
+      </span>
+      <span className="min-w-0">{children}</span>
+    </div>
+  );
+}
+
 function KV({ k, children }: { k: string; children: ReactNode }) {
   return (
     <div className={`grid grid-cols-[7rem_1fr] gap-3 border-b border-dotted ${RULE_SOFT} py-2 sm:grid-cols-[6rem_1fr]`}>
@@ -209,7 +234,7 @@ function Ruler() {
 
 export default function TechnicalHome() {
   return (
-    <div className={`relative overflow-hidden font-mono ${INK}`}>
+    <div className={`technical-page relative overflow-hidden bg-[#f3eee3] font-mono dark:bg-transparent ${INK}`}>
       {/* Dot-grid paper texture */}
       <div
         aria-hidden="true"
@@ -232,19 +257,17 @@ export default function TechnicalHome() {
           <div className="flex flex-col gap-4 md:flex-row">
             <div className="mt-6 w-full md:w-[60%]">
               <ASCIILogo />
-
               {/* Stats strip */}
               <div className={`border ${RULE} p-4 mt-6`}>
                 <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ cat /etc/profile</p>
-                <pre className="mt-2 overflow-x-auto text-[10px] leading-relaxed tracking-[0.05em] sm:text-[11px]">
-                  {`FOCUS ......... COMPLEX DASHBOARDS / FORM-HEAVY UI /
-                SCHEMA-DRIVEN TOOLING
-BELIEF ........ GOOD CODE AND GOOD UI SHOULD BOTH
-                EXPLAIN THEMSELVES.
-CURRENT ....... SCHEMA-FORM — A HEADLESS, SCHEMA-DRIVEN
-                FORM LIBRARY + STYLED COMPANION. `}
-                  <BracketLink label="TRY IT" to="/schema-form" />
-                </pre>
+                <div className="mt-2 space-y-1">
+                  <SpecLine k="FOCUS">COMPLEX DASHBOARDS / FORM-HEAVY UI / SCHEMA-DRIVEN TOOLING</SpecLine>
+                  <SpecLine k="BELIEF">GOOD CODE AND GOOD UI SHOULD BOTH EXPLAIN THEMSELVES.</SpecLine>
+                  <SpecLine k="CURRENT">
+                    SCHEMA-FORM — A HEADLESS, SCHEMA-DRIVEN FORM LIBRARY + STYLED COMPANION.{" "}
+                    <BracketLink label="TRY IT" to="/schema-form" />
+                  </SpecLine>
+                </div>
               </div>
             </div>
             <div className="flex w-full flex-col justify-between md:w-[40%]">
@@ -267,7 +290,7 @@ CURRENT ....... SCHEMA-FORM — A HEADLESS, SCHEMA-DRIVEN
               {/* Calibration strip */}
               <div
                 aria-hidden="true"
-                className={`mt-3 overflow-hidden text-[10px] tracking-[0.3em] whitespace-nowrap select-none ${FAINT} text-center`}
+                className={`mt-3 overflow-hidden text-[10px] tracking-[0.3em] whitespace-nowrap select-none ${FAINT} text-center flex items-center justify-center`}
               >
                 ░░▒▒▓▓██▓▓▒▒░░ CAL. STRIP 100% ░░▒▒▓▓██▓▓▒▒░░
               </div>
@@ -304,8 +327,8 @@ CURRENT ....... SCHEMA-FORM — A HEADLESS, SCHEMA-DRIVEN
             ))}
           </ul>
         </nav>
-        <main className="grid grid-cols-1 gap-x-8 md:grid-cols-[minmax(0,7fr)_minmax(0,3fr)]">
-          <div className="flex flex-col gap-4 w-full justify-between">
+        <main className="grid grid-cols-1 gap-x-4 md:grid-cols-[minmax(0,7fr)_minmax(0,3fr)]">
+          <div className="flex flex-col w-full justify-between">
             {/* ── 01 / Selected work ───────────────────── */}
             <SpineSection id="work" index="01" title="SELECTED WORK" count={featuredProjects.length}>
               <div className="space-y-6">
@@ -323,10 +346,10 @@ CURRENT ....... SCHEMA-FORM — A HEADLESS, SCHEMA-DRIVEN
                         {project.role} — {project.status}
                       </span>
                     </div>
-                    <p className={`text-xs leading-relaxed px-4 py-3 ${FAINT}`}>{project.summary}</p>
-                    <div className="flex flex-row gap-4">
-                      <div className="px-4">
-                        <ul className="mt-3 space-y-1">
+                    <p className={`px-4 py-3 text-xs leading-relaxed ${FAINT}`}>{project.summary}</p>
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
+                      <div className="min-w-0 px-4 pb-4">
+                        <ul className="space-y-1">
                           {project.notes.map((note) => (
                             <li key={note} className="flex gap-2 text-[11px] leading-relaxed tracking-[0.05em]">
                               <span className={FAINT} aria-hidden="true">
@@ -344,7 +367,9 @@ CURRENT ....... SCHEMA-FORM — A HEADLESS, SCHEMA-DRIVEN
                       </div>
 
                       {project.links.length > 0 && (
-                        <div className={`mt-3 flex flex-col gap-x-4 gap-y-1 border-l border-dotted ${RULE_SOFT} pl-3`}>
+                        <div
+                          className={`mx-4 mb-4 flex flex-col gap-y-1 border-t border-dotted pt-3 lg:mx-0 lg:mt-0 lg:mr-4 lg:mb-4 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-3 ${RULE_SOFT}`}
+                        >
                           {project.links.map((link) => (
                             <BracketLink key={link.label} {...link} />
                           ))}
@@ -434,23 +459,29 @@ CURRENT ....... SCHEMA-FORM — A HEADLESS, SCHEMA-DRIVEN
                 <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ which non-negotiables</p>
                 <a
                   href="https://github.com/aidanbell/non-negotiables"
-                  className="underline decoration-dotted underline-offset-4 hover:decoration-solid"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-2 block pb-2 text-[11px] leading-relaxed tracking-[0.05em] break-all underline decoration-dotted underline-offset-4 hover:decoration-solid"
                 >
-                  <pre className="mt-2 overflow-x-auto text-[11px] leading-relaxed tracking-[0.05em] pb-2">
-                    {`https://github.com/aidanbell/non-negotiables`}
-                  </pre>
+                  github.com/aidanbell/non-negotiables
                 </a>
                 <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ cat README.md</p>
-                <pre className="mt-2 overflow-x-auto text-[11px] leading-relaxed tracking-[0.05em] pb-2">
-                  {`A repository of configs that are difficult to work without for the tools we use daily`}
-                </pre>
+                <p className="mt-2 pb-2 text-[11px] leading-relaxed tracking-[0.05em] break-words">
+                  A repository of configs that are difficult to work without for the tools we use daily
+                </p>
                 <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ head -n 4 AGENTS.md</p>
-                <pre className="mt-2 overflow-x-auto text-[11px] leading-relaxed tracking-[0.05em] pb-2">
-                  {`01. READ THE FILE BEFORE EDITING IT.
-02. TYPECHECK + LINT + FORMAT, EVERY TURN.
-03. PREFER THE EXISTING PATTERN OVER A NEW ONE.
-04. SMALL DIFFS. REAL NAMES. NO DEAD CODE.`}
-                </pre>
+                <ol className="mt-2 space-y-1 pb-2 text-[11px] leading-relaxed tracking-[0.05em]">
+                  {[
+                    "READ THE FILE BEFORE EDITING IT.",
+                    "TYPECHECK + LINT + FORMAT, EVERY TURN.",
+                    "PREFER THE EXISTING PATTERN OVER A NEW ONE.",
+                    "SMALL DIFFS. REAL NAMES. NO DEAD CODE.",
+                  ].map((rule, i) => (
+                    <li key={rule}>
+                      <span className={FAINT}>{String(i + 1).padStart(2, "0")}.</span> {rule}
+                    </li>
+                  ))}
+                </ol>
               </div>
             </div>
           </div>
@@ -460,15 +491,15 @@ CURRENT ....... SCHEMA-FORM — A HEADLESS, SCHEMA-DRIVEN
         <SpineSection id="colophon" index="05" title="COLOPHON">
           <div className={`border ${RULE} p-4`}>
             <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ cat /etc/build-info</p>
-            <pre className="mt-2 overflow-x-auto text-[11px] leading-relaxed tracking-[0.05em]">
-              {`RUNTIME ........ REACT 18 + VITE 5
-STYLES ......... TAILWIND CSS 4 (MONOCHROME ONLY)
-LANG ........... TYPESCRIPT 5.9
-FORMS .......... @AIDANBELL/SCHEMA-FORM 0.2
-CONFIG ......... NON-NEGOTIABLES BASELINE ( SEE /04 )
-HOST ........... GITHUB PAGES
-REVISION ....... ${DATE}`}
-            </pre>
+            <div className="mt-2 space-y-1">
+              <SpecLine k="SITE">REACT 18 / REACT ROUTER / TAILWIND CSS 4</SpecLine>
+              <SpecLine k="TYPE">TYPESCRIPT 5.9 / INTEL ONE MONO</SpecLine>
+              <SpecLine k="REQUESTS">NO ANALYTICS, NO API</SpecLine>
+              <SpecLine k="ROUTES">/ + /SCHEMA-FORM (LAZY)</SpecLine>
+              <SpecLine k="CONFIG">NON-NEGOTIABLES BASELINE ( SEE /04 )</SpecLine>
+              <SpecLine k="HOST">GITHUB PAGES</SpecLine>
+              <SpecLine k="REVISION">{DATE}</SpecLine>
+            </div>
             {/* Barcode strip */}
             <div
               aria-hidden="true"
@@ -478,9 +509,6 @@ REVISION ....... ${DATE}`}
               className={`mt-2 flex flex-wrap items-baseline justify-between gap-2 text-[10px] tracking-[0.2em] ${FAINT}`}
             >
               <span>AIDANB.IO — ALL SYSTEMS NOMINAL</span>
-              <Link to="/" className="underline decoration-dotted underline-offset-4 hover:decoration-solid">
-                [EXIT TO STANDARD SITE]
-              </Link>
             </div>
           </div>
         </SpineSection>

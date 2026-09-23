@@ -1,23 +1,32 @@
-import { Moon, Sun } from "lucide-react";
 import { useTheme } from "../../hooks/useTheme";
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
-  const nextLabel = theme === "dark" ? "light" : "dark";
+  const isDark = theme === "dark";
+  const nextLabel = isDark ? "light" : "dark";
 
   return (
     <button
       type="button"
+      role="switch"
+      aria-checked={isDark}
       onClick={toggleTheme}
-      className="inline-flex size-8 items-center justify-center rounded-md text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-900 dark:hover:text-neutral-100"
       aria-label={`Switch to ${nextLabel} mode`}
       title={`Switch to ${nextLabel} mode`}
+      className="inline-flex items-center gap-1.5 text-neutral-900 transition-opacity hover:opacity-70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-current dark:text-neutral-100"
     >
-      {theme === "dark" ? (
-        <Sun className="size-4" strokeWidth={1.75} aria-hidden="true" />
-      ) : (
-        <Moon className="size-4" strokeWidth={1.75} aria-hidden="true" />
-      )}
+      <span aria-hidden="true" className={`text-lg leading-none ${isDark ? "opacity-60" : ""}`}>
+        ☼
+      </span>
+      <span
+        aria-hidden="true"
+        className="inline-flex h-4 items-center border border-neutral-900/50 dark:border-neutral-100/50 px-1 text-[6px] leading-none"
+      >
+        {isDark ? "░░░░░██" : "██░░░░░"}
+      </span>
+      <span aria-hidden="true" className={`text-lg leading-none ${isDark ? "" : "opacity-50"}`}>
+        ☾
+      </span>
     </button>
   );
 }

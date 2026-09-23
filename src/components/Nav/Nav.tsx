@@ -3,9 +3,9 @@ import { Link, useLocation } from "react-router-dom";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 
 const linkClass =
-  "relative text-sm text-neutral-500 transition-colors hover:text-neutral-900 after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-200 hover:after:scale-x-100 dark:text-neutral-400 dark:hover:text-neutral-100";
+  "text-[11px] tracking-[0.15em] text-neutral-500 underline decoration-dotted underline-offset-4 transition-colors hover:text-neutral-900 hover:decoration-solid dark:text-neutral-400 dark:hover:text-neutral-100";
 
-const activeLinkClass = "text-neutral-900 after:scale-x-100 dark:text-neutral-100";
+const activeLinkClass = "text-neutral-900 decoration-solid dark:text-neutral-100";
 
 function NavLink({ to, hash, children }: { to: string; hash?: string; children: ReactNode }) {
   const location = useLocation();
@@ -17,20 +17,22 @@ function NavLink({ to, hash, children }: { to: string; hash?: string; children: 
 
   return (
     <Link to={destination} className={`${linkClass}${isActive ? ` ${activeLinkClass}` : ""}`}>
-      {children}
+      [{children}]
     </Link>
   );
 }
 
-export default function Nav() {
+export default function Nav({ className }: { className?: string }) {
   return (
-    <header className="fixed inset-x-0 top-0 z-10 flex h-14 items-center justify-between border-b border-neutral-200/80 bg-white/80 px-6 backdrop-blur-md dark:border-neutral-800/80 dark:bg-neutral-950/80">
+    <header
+      className={`fixed inset-x-0 top-0 z-10 flex h-14 items-center justify-between border-b border-neutral-900/25 bg-[#f3eee3]/85 px-6 font-mono backdrop-blur-md dark:border-neutral-100/25 dark:bg-neutral-950/80 ${className ?? ""}`}
+    >
       <Link to="/" className="font-display text-lg font-medium tracking-tight transition-opacity hover:opacity-70">
         /ab/
       </Link>
       <div className="flex items-center gap-6">
         <nav className="hidden gap-6 text-nowrap sm:flex" aria-label="Main">
-          <NavLink to="/schema-form">schema-form</NavLink>
+          <NavLink to="/schema-form">SCHEMA-FORM</NavLink>
         </nav>
         <ThemeToggle />
       </div>

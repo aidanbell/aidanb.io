@@ -1,12 +1,27 @@
-import type { ComponentType, SVGProps } from "react";
+import type { ComponentType } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, ExternalLink, FilePenLine, Film, LayoutDashboard, Package, type LucideIcon } from "lucide-react";
 import { GitHubIcon } from "../icons/BrandIcons";
 import { chipClass, headingClass, mutedTextClass, sectionBorderClass } from "../../lib/styles";
 
 const linkIconClass = "size-3.5 shrink-0";
 
-type IconComponent = LucideIcon | ComponentType<SVGProps<SVGSVGElement>>;
+type IconComponent = ComponentType<{ className?: string }>;
+
+function glyph(char: string): IconComponent {
+  return function Glyph({ className }: { className?: string }) {
+    return (
+      <span className={className} aria-hidden="true">
+        {char}
+      </span>
+    );
+  };
+}
+
+const LayoutDashboard = glyph("▦");
+const PackageIcon = glyph("▣");
+const Film = glyph("▶");
+const FilePenLine = glyph("✎");
+const ArrowUpRight = glyph("↗");
 
 type ProjectLink = {
   label: string;
@@ -19,7 +34,7 @@ type Project = {
   name: string;
   role: string;
   featured?: boolean;
-  icon: LucideIcon;
+  icon: IconComponent;
   description: string;
   stack: string[];
   highlights: string[];
@@ -56,7 +71,7 @@ const projects: Project[] = [
   {
     name: "schema-form",
     role: "Open source · npm",
-    icon: Package,
+    icon: PackageIcon,
     description:
       "A pair of React packages for schema-driven forms: a headless engine that parses a JSON schema into validation and field state, and a styled Tailwind/BaseUI layer that renders an accessible form from that same config. Built so internal tools can ship form-heavy UIs without hardcoding every field.",
     stack: ["React", "TypeScript", "Valibot", "React Hook Form", "Tailwind CSS", "Base UI"],
@@ -74,12 +89,12 @@ const projects: Project[] = [
       {
         label: "schema-form",
         href: "https://www.npmjs.com/package/@aidanbell/schema-form",
-        icon: Package,
+        icon: PackageIcon,
       },
       {
         label: "schema-form-ui",
         href: "https://www.npmjs.com/package/@aidanbell/schema-form-ui",
-        icon: Package,
+        icon: PackageIcon,
       },
       {
         label: "GitHub",
@@ -124,7 +139,7 @@ const projects: Project[] = [
       {
         label: "Live site",
         href: "https://aidanbell.github.io/Markdowner98/",
-        icon: ExternalLink,
+        icon: ArrowUpRight,
       },
       {
         label: "GitHub",
@@ -168,7 +183,7 @@ export default function Projects() {
                         : "border-neutral-200 bg-neutral-50 text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400"
                     }`}
                   >
-                    <ProjectIcon className="size-4" strokeWidth={1.75} aria-hidden="true" />
+                    <ProjectIcon className="size-4" aria-hidden="true" />
                   </span>
                   <h3 className="text-lg font-medium tracking-tight">{project.name}</h3>
                   {project.featured && (
@@ -198,7 +213,7 @@ export default function Projects() {
                     const LinkIcon = link.icon;
                     const content = (
                       <>
-                        <LinkIcon className={linkIconClass} strokeWidth={1.75} aria-hidden="true" />
+                        <LinkIcon className={linkIconClass} aria-hidden="true" />
                         {link.label}
                       </>
                     );

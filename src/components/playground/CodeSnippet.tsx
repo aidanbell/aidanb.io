@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Check, Copy } from "lucide-react";
 import type { FormDefinition } from "@aidanbell/schema-form";
 import type { SchemaFormClassNames } from "@aidanbell/schema-form-ui";
 import Button from "../ui/Button";
@@ -139,13 +138,8 @@ function CopyButton({ text, label }: { text: string; label: string }) {
   };
 
   return (
-    <Button variant="secondary" size="sm" onClick={handleCopy} className="gap-1.5">
-      {copied ? (
-        <Check className="size-3.5 text-green-600 dark:text-green-400" strokeWidth={1.75} aria-hidden="true" />
-      ) : (
-        <Copy className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
-      )}
-      {copied ? "Copied" : label}
+    <Button variant="secondary" size="sm" onClick={handleCopy}>
+      [{copied ? "Copied" : label}]
     </Button>
   );
 }
@@ -172,30 +166,30 @@ export default function CodeSnippet({ schema, mode, themeClassNames, customContr
           : "The styled component, with your current schema and theme.";
 
   return (
-    <section className="mt-6 rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
+    <section className="mt-6 border border-neutral-900/25 p-4 dark:border-neutral-100/25">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h2 className="text-sm font-medium">Use it in your app</h2>
+          <h2 className="text-[11px] font-bold tracking-[0.2em]">USE IT IN YOUR APP</h2>
           <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{blurb}</p>
         </div>
         <CopyButton text={snippet} label="Copy code" />
       </div>
 
       <div className="mb-3 flex items-center gap-2">
-        <pre className="min-w-0 flex-1 overflow-x-auto rounded-md bg-neutral-50 px-3 py-2 text-xs text-neutral-800 dark:bg-neutral-950 dark:text-neutral-200">
+        <pre className="min-w-0 flex-1 overflow-x-auto border border-dotted border-neutral-900/15 bg-neutral-900/[0.03] px-3 py-2 text-xs text-neutral-800 dark:border-neutral-100/15 dark:bg-neutral-950 dark:text-neutral-200">
           {install}
         </pre>
         <CopyButton text={install} label="Copy" />
       </div>
 
-      <pre className="overflow-x-auto rounded-md bg-neutral-50 p-4 text-xs leading-relaxed text-neutral-800 dark:bg-neutral-950 dark:text-neutral-200">
+      <pre className="overflow-x-auto border border-dotted border-neutral-900/15 bg-neutral-900/[0.03] p-4 text-xs leading-relaxed text-neutral-800 dark:border-neutral-100/15 dark:bg-neutral-950 dark:text-neutral-200">
         {snippet}
       </pre>
 
       {mode === "styled" && (
         <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">
           schema-form-ui ships no CSS file — add{" "}
-          <code className="rounded bg-neutral-100 px-1 py-0.5 dark:bg-neutral-800">
+          <code className="text-[11px] tracking-[0.04em]">
             @source "../node_modules/@aidanbell/schema-form-ui/dist/**/*.{"{"}
             js,mjs{"}"}"
           </code>{" "}

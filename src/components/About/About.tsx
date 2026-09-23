@@ -1,14 +1,21 @@
-import type { ComponentType, SVGProps } from "react";
-import { FileText, type LucideIcon } from "lucide-react";
+import type { ComponentType } from "react";
 import mePic from "../../assets/me.jpeg";
 import resume from "../../assets/aidan_bell26.pdf";
 import { GitHubIcon, LinkedInIcon } from "../icons/BrandIcons";
 import { headingClass, mutedTextClass, sectionClass } from "../../lib/styles";
 
+function ResumeIcon({ className }: { className?: string }) {
+  return (
+    <span className={className} aria-hidden="true">
+      ▤
+    </span>
+  );
+}
+
 type AboutLink = {
   label: string;
   href: string;
-  icon: LucideIcon | ComponentType<SVGProps<SVGSVGElement>>;
+  icon: ComponentType<{ className?: string }>;
   external?: boolean;
   download?: boolean;
 };
@@ -29,7 +36,7 @@ const links: AboutLink[] = [
   {
     label: "Resume",
     href: resume,
-    icon: FileText,
+    icon: ResumeIcon,
     download: true,
   },
 ];
