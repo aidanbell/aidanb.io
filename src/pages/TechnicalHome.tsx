@@ -25,21 +25,39 @@ type TechProject = {
 };
 
 const featuredProjects: TechProject[] = [
+  // {
+  //   fig: "01",
+  //   name: "CAMPAIGN DASHBOARD MODERNIZATION",
+  //   status: "ACTIVE",
+  //   role: "FULL-STACK",
+  //   summary:
+  //     "End-to-end rebuild of a decade-old internal dashboard — UI, state, and API layer — for data-heavy campaign workflows. Denser list views, predictable action hierarchy, sectioned routes instead of a monolithic client store.",
+  //   notes: [
+  //     "THIRD-PARTY DEPENDENCIES CUT ~50%; LONG-STANDING SECURITY DEBT PATCHED",
+  //     "1000+ LINE CLIENT STORE SPLIT INTO SHAREABLE SECTION ROUTES",
+  //     "BULK CSV UPLOADS HARDENED W/ EXPLICIT VALID / UPDATE / REMOVE FEEDBACK",
+  //     "DEPLOY TIME: 30+ MIN -> ~5 MIN",
+  //   ],
+  //   stack: ["REACT 19", "TYPESCRIPT", "TANSTACK", "TAILWIND 4", "RADIX", "VALIBOT", "ZUSTAND", "VITE"],
+  //   links: [],
+  // },
   {
     fig: "01",
-    name: "CAMPAIGN DASHBOARD MODERNIZATION",
+    name: "RIPSTAURANT",
     status: "ACTIVE",
     role: "FULL-STACK",
     summary:
-      "End-to-end rebuild of a decade-old internal dashboard — UI, state, and API layer — for data-heavy campaign workflows. Denser list views, predictable action hierarchy, sectioned routes instead of a monolithic client store.",
+      "A full-stack web application tracking restaurant closures using publicly available data from the City of Toronto. See each business' history and reason for closure on a live map of the city.",
     notes: [
-      "THIRD-PARTY DEPENDENCIES CUT ~50%; LONG-STANDING SECURITY DEBT PATCHED",
-      "1000+ LINE CLIENT STORE SPLIT INTO SHAREABLE SECTION ROUTES",
-      "BULK CSV UPLOADS HARDENED W/ EXPLICIT VALID / UPDATE / REMOVE FEEDBACK",
-      "DEPLOY TIME: 30+ MIN -> ~5 MIN",
+      "BUN JOBS: PIPES TORONTO OPEN DATA INTO POSTGIS FOR CLOSURE ANALYSIS",
+      "SERVERLESS: STATIC GEOJSON STORED ON CLOUDFLARE R2",
+      "SHARED ZOD CONTRACT BETWEEN PIPELINE AND CLIENT",
     ],
-    stack: ["REACT 19", "TYPESCRIPT", "TANSTACK", "TAILWIND 4", "RADIX", "VALIBOT", "ZUSTAND", "VITE"],
-    links: [],
+    stack: ["REACT", "POSTGRESQL", "BUN", "CLOUDFLARE", "TAILWIND CSS"],
+    links: [
+      { label: "GITHUB", href: "https://github.com/aidanbell/ripstaurant" },
+      { label: "LIVE", href: "https://ripstaurant.ca" },
+    ],
   },
   {
     fig: "02",
@@ -87,7 +105,7 @@ const projects: TechProject[] = [
   {
     fig: "05",
     name: "MARKDOWNER98",
-    status: "SHIPPED - HACKATHON WINNER",
+    status: "HACKATHON WINNER",
     role: "FRONT-END",
     summary: "Mintbean Hackathon winner. Live markdown editor with a 90s flavor.",
     notes: ["LIVE PREVIEW W/ SIMULTANEOUS SCROLL", "EXPORT-TO-PDF FLOW"],
@@ -184,7 +202,7 @@ function SpecLine({ k, children }: { k: string; children: ReactNode }) {
 
 function KV({ k, children }: { k: string; children: ReactNode }) {
   return (
-    <div className={`grid grid-cols-[7rem_1fr] gap-3 border-b border-dotted ${RULE_SOFT} py-2 sm:grid-cols-[6rem_1fr]`}>
+    <div className={`grid grid-cols-[4rem_1fr] gap-3 border-b border-dotted ${RULE_SOFT} py-2 sm:grid-cols-[6rem_1fr]`}>
       <dt className={`${FAINT} text-[11px] tracking-[0.15em]`}>{k}</dt>
       <dd className={`${INK} text-xs leading-relaxed text-right`}>{children}</dd>
     </div>
@@ -254,24 +272,23 @@ export default function TechnicalHome() {
             <span>REV. {DATE}</span>
           </div>
           <Ruler />
-          <div className="flex flex-col gap-4 md:flex-row">
-            <div className="mt-6 w-full md:w-[60%]">
+          <div className="mt-6 grid grid-cols-1 gap-x-4 gap-y-6 [grid-template-areas:'logo'_'about'_'profile'] md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:[grid-template-areas:'logo_about'_'profile_about']">
+            <div className="[grid-area:logo]">
               <ASCIILogo />
-              {/* Stats strip */}
-              <div className={`border ${RULE} p-4 mt-6`}>
-                <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ cat /etc/profile</p>
-                <div className="mt-2 space-y-1">
-                  <SpecLine k="FOCUS">COMPLEX DASHBOARDS / FORM-HEAVY UI / SCHEMA-DRIVEN TOOLING</SpecLine>
-                  <SpecLine k="BELIEF">GOOD CODE AND GOOD UI SHOULD BOTH EXPLAIN THEMSELVES.</SpecLine>
-                  <SpecLine k="CURRENT">
-                    SCHEMA-FORM — A HEADLESS, SCHEMA-DRIVEN FORM LIBRARY + STYLED COMPANION.{" "}
-                    <BracketLink label="TRY IT" to="/schema-form" />
-                  </SpecLine>
-                </div>
+            </div>
+            <div className={`[grid-area:profile] border ${RULE} p-4`}>
+              <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ cat /etc/profile</p>
+              <div className="mt-2 space-y-1">
+                <SpecLine k="FOCUS">COMPLEX DASHBOARDS / FORM-HEAVY UI / SCHEMA-DRIVEN TOOLING</SpecLine>
+                <SpecLine k="BELIEF">GOOD CODE AND GOOD UI SHOULD BOTH EXPLAIN THEMSELVES.</SpecLine>
+                <SpecLine k="CURRENT">
+                  SCHEMA-FORM — A HEADLESS, SCHEMA-DRIVEN FORM LIBRARY + STYLED COMPANION.{" "}
+                  <BracketLink label="TRY IT" to="/schema-form" />
+                </SpecLine>
               </div>
             </div>
-            <div className="flex w-full flex-col justify-between md:w-[40%]">
-              <h1 className="mt-2 text-2xl font-bold tracking-[0.25em] sm:text-3xl md:mt-6">
+            <div className="flex flex-col justify-between [grid-area:about]">
+              <h1 className="text-2xl font-bold tracking-[0.25em] sm:text-3xl">
                 AIDAN BELL
                 <span
                   aria-hidden="true"
@@ -349,24 +366,28 @@ export default function TechnicalHome() {
                     <p className={`px-4 py-3 text-xs leading-relaxed ${FAINT}`}>{project.summary}</p>
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
                       <div className="min-w-0 px-4 pb-4">
-                        <ul className="space-y-1">
-                          {project.notes.map((note) => (
-                            <li key={note} className="flex gap-2 text-[11px] leading-relaxed tracking-[0.05em]">
-                              <span className={FAINT} aria-hidden="true">
-                                {">"}
-                              </span>
-                              <span>{note}</span>
-                            </li>
-                          ))}
-                        </ul>
-                        <div className={`mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[10px] tracking-[0.1em] ${FAINT}`}>
-                          {project.stack.map((tech) => (
-                            <span key={tech}>[{tech}]</span>
-                          ))}
-                        </div>
+                        {project.notes && project.notes.length > 0 && (
+                          <ul className="space-y-1">
+                            {project.notes.map((note) => (
+                              <li key={note} className="flex gap-2 text-[11px] leading-relaxed tracking-[0.05em]">
+                                <span className={FAINT} aria-hidden="true">
+                                  {">"}
+                                </span>
+                                <span>{note}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                        {project.stack && project.stack.length > 0 && (
+                          <div className={`mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[10px] tracking-[0.1em] ${FAINT}`}>
+                            {project.stack.map((tech) => (
+                              <span key={tech}>[{tech}]</span>
+                            ))}
+                          </div>
+                        )}
                       </div>
 
-                      {project.links.length > 0 && (
+                      {project.links && project.links.length > 0 && (
                         <div
                           className={`mx-4 mb-4 flex flex-col gap-y-1 border-t border-dotted pt-3 lg:mx-0 lg:mt-0 lg:mr-4 lg:mb-4 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-3 ${RULE_SOFT}`}
                         >
@@ -384,27 +405,31 @@ export default function TechnicalHome() {
             <SpineSection id="projects" index="03" title="PROJECTS" count={projects.length} className="pt-0 mt-0">
               <div className={`border ${RULE} p-4`}>
                 <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ ls -la ~/projects</p>
-                <ul className="mt-3 space-y-2">
+                <ul className="mt-3 divide-y divide-dotted divide-neutral-900/15 dark:divide-neutral-100/15">
                   {projects.map((project) => (
                     <li
                       key={project.fig}
-                      className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[11px] tracking-[0.05em]"
+                      className="grid grid-cols-[2.25rem_minmax(0,1fr)] items-baseline gap-x-3 gap-y-1 py-3 text-[11px] tracking-[0.05em] [grid-template-areas:'fig_head'_'fig_meta'_'fig_summary'] first:pt-1 last:pb-0 lg:flex lg:flex-wrap lg:py-2"
                     >
-                      <span className={FAINT}>[{project.fig}]</span>
-                      <span className="font-bold tracking-[0.1em]">{project.name}</span>
-                      <span
-                        aria-hidden="true"
-                        className={`min-w-8 flex-1 -translate-y-[0.25em] border-b border-dotted ${RULE_SOFT}`}
-                      />
-                      <span className={`text-[10px] tracking-[0.15em] ${FAINT}`}>
+                      <span className={`${FAINT} [grid-area:fig]`}>[{project.fig}]</span>
+                      <div className="flex min-w-0 items-baseline gap-x-2 [grid-area:head] lg:contents">
+                        <span className="shrink-0 font-bold tracking-[0.1em]">{project.name}</span>
+                        <span
+                          aria-hidden="true"
+                          className={`min-w-2 flex-1 -translate-y-[0.25em] border-b border-dotted lg:min-w-8 ${RULE_SOFT}`}
+                        />
+                        <span className="flex shrink-0 flex-col items-end gap-y-0.5 lg:order-5 lg:flex-row lg:items-baseline lg:gap-x-3 lg:gap-y-0">
+                          {(project.links ?? []).map((link) => (
+                            <BracketLink key={link.label} {...link} />
+                          ))}
+                        </span>
+                      </div>
+                      <span className={`min-w-0 text-[10px] tracking-[0.15em] [grid-area:meta] lg:order-4 ${FAINT}`}>
                         {project.role} — {project.status}
                       </span>
-                      <span className="flex gap-x-3">
-                        {project.links.map((link) => (
-                          <BracketLink key={link.label} {...link} />
-                        ))}
-                      </span>
-                      <span className={`ml-10 basis-full text-[10px] tracking-[0.15em] ${FAINT}`}>
+                      <span
+                        className={`min-w-0 text-[10px] tracking-[0.15em] [grid-area:summary] lg:order-6 lg:ml-10 lg:basis-full ${FAINT}`}
+                      >
                         {project.summary}
                       </span>
                     </li>
@@ -434,6 +459,37 @@ export default function TechnicalHome() {
           <div className={`relative border ${RULE} p-4`}>
             <Reticle />
             <div className="grid gap-x-8 gap-y-6 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+              <div
+                className={`min-w-0 border-t border-dotted pt-4 md:border-t-0 md:border-l md:pt-0 md:pl-6 ${RULE_SOFT}`}
+              >
+                <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ which non-negotiables</p>
+                <a
+                  href="https://github.com/aidanbell/non-negotiables"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-2 block pb-2 text-[11px] leading-relaxed tracking-[0.05em] break-all underline decoration-dotted underline-offset-4 hover:decoration-solid"
+                >
+                  github.com/aidanbell/non-negotiables
+                </a>
+                <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ cat README.md</p>
+                <p className="mt-2 pb-2 text-[11px] leading-relaxed tracking-[0.05em] break-words">
+                  A repository of configs that are difficult to work without for the tools we use daily. Empahasizes
+                  consistency and readability throughout the codebase.
+                </p>
+                <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ head -n 4 AGENTS.md</p>
+                <ol className="mt-2 space-y-1 pb-2 text-[11px] leading-relaxed tracking-[0.05em]">
+                  {[
+                    "READ THE FILE BEFORE EDITING IT.",
+                    "TYPECHECK + LINT + FORMAT, EVERY TURN.",
+                    "PREFER THE EXISTING PATTERN OVER A NEW ONE.",
+                    "SMALL DIFFS. REAL NAMES. NO DEAD CODE.",
+                  ].map((rule, i) => (
+                    <li key={rule}>
+                      <span className={FAINT}>{String(i + 1).padStart(2, "0")}.</span> {rule}
+                    </li>
+                  ))}
+                </ol>
+              </div>
               <div className="min-w-0">
                 <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ tree ~/non-negotiables</p>
                 <pre className="mt-2 overflow-x-auto text-[11px] leading-relaxed tracking-[0.05em]">
@@ -452,36 +508,6 @@ export default function TechnicalHome() {
     └── typescript/
         └──  tsconfig.base.json`}
                 </pre>
-              </div>
-              <div
-                className={`min-w-0 border-t border-dotted pt-4 md:border-t-0 md:border-l md:pt-0 md:pl-6 ${RULE_SOFT}`}
-              >
-                <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ which non-negotiables</p>
-                <a
-                  href="https://github.com/aidanbell/non-negotiables"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-2 block pb-2 text-[11px] leading-relaxed tracking-[0.05em] break-all underline decoration-dotted underline-offset-4 hover:decoration-solid"
-                >
-                  github.com/aidanbell/non-negotiables
-                </a>
-                <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ cat README.md</p>
-                <p className="mt-2 pb-2 text-[11px] leading-relaxed tracking-[0.05em] break-words">
-                  A repository of configs that are difficult to work without for the tools we use daily
-                </p>
-                <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ head -n 4 AGENTS.md</p>
-                <ol className="mt-2 space-y-1 pb-2 text-[11px] leading-relaxed tracking-[0.05em]">
-                  {[
-                    "READ THE FILE BEFORE EDITING IT.",
-                    "TYPECHECK + LINT + FORMAT, EVERY TURN.",
-                    "PREFER THE EXISTING PATTERN OVER A NEW ONE.",
-                    "SMALL DIFFS. REAL NAMES. NO DEAD CODE.",
-                  ].map((rule, i) => (
-                    <li key={rule}>
-                      <span className={FAINT}>{String(i + 1).padStart(2, "0")}.</span> {rule}
-                    </li>
-                  ))}
-                </ol>
               </div>
             </div>
           </div>
