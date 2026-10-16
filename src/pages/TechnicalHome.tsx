@@ -79,6 +79,24 @@ const featuredProjects: TechProject[] = [
       { label: "GITHUB", href: "https://github.com/aidanbell/schema-form" },
     ],
   },
+  {
+    fig: "03",
+    name: "VIBELOOKS",
+    status: "ACTIVE",
+    role: "FRONT-END, SERVERLESS",
+    summary:
+      "An ongoing project to determine patterns and trends in vibe-coded web-apps using public repos on Github, and a steady background crawler.",
+    notes: [
+      "CRAWLER: SCRAPES FOR FRONT-END REPOS WITH AGENT FINGERPRINTS",
+      "PARSE: SCOURS FOR STYLES, COLORS, AND LIBRARIES",
+      "ANALYZE: SUMMARIZES RESULTS INTO JSON, PUSHES TO THE PROJECT",
+    ],
+    stack: ["REACT", "TYPESCRIPT", "NODE", "TAILWIND", "SQLITE"],
+    links: [
+      { label: "GITHUB", href: "https://github.com/aidanbell/vibelooks" },
+      { label: "LIVE", href: "https://vibelooks.aidanb.io" },
+    ],
+  },
 ];
 
 const projects: TechProject[] = [
@@ -401,42 +419,6 @@ export default function TechnicalHome() {
                 ))}
               </div>
             </SpineSection>
-            {/* ── 04 / Projects ledger ─────────────────── */}
-            <SpineSection id="projects" index="03" title="PROJECTS" count={projects.length} className="pt-0 mt-0">
-              <div className={`border ${RULE} p-4`}>
-                <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ ls -la ~/projects</p>
-                <ul className="mt-3 divide-y divide-dotted divide-neutral-900/15 dark:divide-neutral-100/15">
-                  {projects.map((project) => (
-                    <li
-                      key={project.fig}
-                      className="grid grid-cols-[2.25rem_minmax(0,1fr)] items-baseline gap-x-3 gap-y-1 py-3 text-[11px] tracking-[0.05em] [grid-template-areas:'fig_head'_'fig_meta'_'fig_summary'] first:pt-1 last:pb-0 lg:flex lg:flex-wrap lg:py-2"
-                    >
-                      <span className={`${FAINT} [grid-area:fig]`}>[{project.fig}]</span>
-                      <div className="flex min-w-0 items-baseline gap-x-2 [grid-area:head] lg:contents">
-                        <span className="shrink-0 font-bold tracking-[0.1em]">{project.name}</span>
-                        <span
-                          aria-hidden="true"
-                          className={`min-w-2 flex-1 -translate-y-[0.25em] border-b border-dotted lg:min-w-8 ${RULE_SOFT}`}
-                        />
-                        <span className="flex shrink-0 flex-col items-end gap-y-0.5 lg:order-5 lg:flex-row lg:items-baseline lg:gap-x-3 lg:gap-y-0">
-                          {(project.links ?? []).map((link) => (
-                            <BracketLink key={link.label} {...link} />
-                          ))}
-                        </span>
-                      </div>
-                      <span className={`min-w-0 text-[10px] tracking-[0.15em] [grid-area:meta] lg:order-4 ${FAINT}`}>
-                        {project.role} — {project.status}
-                      </span>
-                      <span
-                        className={`min-w-0 text-[10px] tracking-[0.15em] [grid-area:summary] lg:order-6 lg:ml-10 lg:basis-full ${FAINT}`}
-                      >
-                        {project.summary}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </SpineSection>
           </div>
           {/* ── 03 / Method ──────────────────────────── */}
           <SpineSection id="method" index="02" title="METHOD" count={principles.length}>
@@ -453,6 +435,42 @@ export default function TechnicalHome() {
             </ol>
           </SpineSection>
         </main>
+        {/* ── 04 / Projects ledger ─────────────────── */}
+        <SpineSection id="projects" index="03" title="PROJECTS" count={projects.length} className="pt-0 mt-0">
+          <div className={`border ${RULE} p-4`}>
+            <p className={`text-[11px] tracking-[0.1em] ${FAINT}`}>$ ls -la ~/projects</p>
+            <ul className="mt-3 divide-y divide-dotted divide-neutral-900/15 dark:divide-neutral-100/15">
+              {projects.map((project) => (
+                <li
+                  key={project.fig}
+                  className="grid grid-cols-[2.25rem_minmax(0,1fr)] items-baseline gap-x-3 gap-y-1 py-3 text-[11px] tracking-[0.05em] [grid-template-areas:'fig_head'_'fig_meta'_'fig_summary'] first:pt-1 last:pb-0 lg:flex lg:flex-wrap lg:py-2"
+                >
+                  <span className={`${FAINT} [grid-area:fig]`}>[{project.fig}]</span>
+                  <div className="flex min-w-0 items-baseline gap-x-2 [grid-area:head] lg:contents">
+                    <span className="shrink-0 font-bold tracking-[0.1em]">{project.name}</span>
+                    <span
+                      aria-hidden="true"
+                      className={`min-w-2 flex-1 -translate-y-[0.25em] border-b border-dotted lg:min-w-8 ${RULE_SOFT}`}
+                    />
+                    <span className="flex shrink-0 flex-col items-end gap-y-0.5 lg:order-5 lg:flex-row lg:items-baseline lg:gap-x-3 lg:gap-y-0">
+                      {(project.links ?? []).map((link) => (
+                        <BracketLink key={link.label} {...link} />
+                      ))}
+                    </span>
+                  </div>
+                  <span className={`min-w-0 text-[10px] tracking-[0.15em] [grid-area:meta] lg:order-4 ${FAINT}`}>
+                    {project.role} — {project.status}
+                  </span>
+                  <span
+                    className={`min-w-0 text-[10px] tracking-[0.15em] [grid-area:summary] lg:order-6 lg:ml-10 lg:basis-full ${FAINT}`}
+                  >
+                    {project.summary}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </SpineSection>
 
         {/* ── 05 / Non-negotiables ─────────────────── */}
         <SpineSection id="non-negotiables" index="04" title="NON-NEGOTIABLES">
